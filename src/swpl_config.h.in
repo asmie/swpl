@@ -1,0 +1,82 @@
+  /**
+ *  @file    swpl_config.h
+ *  @brief  Main include file with generated configuration.
+ *
+ *  @author Piotr "asmie" Olszewski     asmie@asmie.pl
+ *
+ *  @date   2019.04.12
+ *
+ */
+
+#ifndef GENERATED_SWPL_H_IN
+#define GENERATED_SWPL_H_IN
+
+// Versioning
+#define SWPL_VERSION_MAJOR		@SWPL_VERSION_MAJOR@
+#define SWPL_VERSION_MINOR		@SWPL_VERSION_MINOR@
+#define SWPL_VERSION_REV			@SWPL_VERSION_REV@
+
+// System header checks
+#cmakedefine	SWPL_SYSTEM_HAVE_CSTDLIB
+#cmakedefine	SWPL_SYSTEM_HAVE_CSTDIO
+#cmakedefine	SWPL_SYSTEM_HAVE_IOSTREAM
+#cmakedefine	SWPL_SYSTEM_HAVE_FSTREAM
+#cmakedefine	SWPL_SYSTEM_HAVE_EXCEPTION
+#cmakedefine	SWPL_SYSTEM_HAVE_REGEX
+#cmakedefine	SWPL_SYSTEM_HAVE_UNORDERED_MAP
+
+// System function checks
+#cmakedefine  	SWPL_SYSTEM_HAVE_EXIT_SUCCESS
+#cmakedefine  	SWPL_SYSTEM_HAVE_MEMCPY
+#cmakedefine  	SWPL_SYSTEM_HAVE_VSYSLOG
+#cmakedefine  	SWPL_SYSTEM_HAVE_VPRINTF
+#cmakedefine  	SWPL_SYSTEM_HAVE_FFLUSH
+
+
+
+/* Automatic checks for critical components. 
+ Not all above libraries and files are needed, however some of them are really mandatory.
+ Abort if they are not present.
+*/
+
+#ifndef SWPL_SYSTEM_HAVE_CSTDLIB
+#error "swpl has to use standard C library!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_CSTDIO
+#error "swpl has to use standard C input\output!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_IOSTREAM
+#error "swpl has to use standard C++ streams!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_CSTRING
+#error "swpl has to use standard C string functions!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_CSTDARG
+#error "swpl has to use standard C standard variadic arguments!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_ATOMIC
+#error "swpl has to use standard C++ atomics!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_REGEX
+#error "swpl has to use standard C++ regex!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_FSTREAM
+#error "swpl has to use standard C++ file streams!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_EXCEPTION
+#error "swpl has to use standard C++ exceptions!"
+#endif
+
+#ifndef SWPL_SYSTEM_HAVE_UNORDERED_MAP
+#error "SWPL has to use standard C++ unordered_map!"
+#endif
+
+#endif /* GENERATED_SWPL_H_IN */
