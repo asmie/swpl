@@ -11,6 +11,7 @@ set (SWPL_VERSION_REV 1)
 set (SWPL_VERSION ${SWPL_VERSION_MAJOR}.${SWPL_VERSION_MINOR}.${SWPL_VERSION_REV} )
 
 # Configuration
+enable_language(CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
@@ -22,6 +23,9 @@ else()
     add_compile_options(-Wall -Wextra -Werror -pipe)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3 -ggdb")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -0s")
+	
+	if (
+	set(CMAKE_EXE_LINKER_FLAGS "-z now -s")
 endif()
 
 # Checking time
