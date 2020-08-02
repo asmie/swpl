@@ -24,7 +24,6 @@ else()
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3 -ggdb")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -0s")
 	
-	if (
 	set(CMAKE_EXE_LINKER_FLAGS "-z now -s")
 endif()
 
@@ -35,8 +34,13 @@ include (CheckCXXSymbolExists)
 check_include_file_cxx (cstdlib SWPL_SYSTEM_HAVE_CSTDLIB)
 check_include_file_cxx (cstdio SWPL_SYSTEM_HAVE_CSTDIO)
 check_include_file_cxx (iostream SWPL_SYSTEM_HAVE_IOSTREAM)
+check_include_file_cxx (cstring SWPL_SYSTEM_HAVE_CSTRING)
+check_include_file_cxx (cstdarg SWPL_SYSTEM_HAVE_CSTDARG)
+check_include_file_cxx (atomic SWPL_SYSTEM_HAVE_ATOMIC)
 check_include_file_cxx (fstream SWPL_SYSTEM_HAVE_FSTREAM)
 check_include_file_cxx (exception SWPL_SYSTEM_HAVE_EXCEPTION)
+check_include_file_cxx (regex SWPL_SYSTEM_HAVE_REGEX)
+check_include_file_cxx (unordered_map SWPL_SYSTEM_HAVE_UNORDERED_MAP)
 
 check_cxx_symbol_exists (EXIT_SUCCESS cstdlib SWPL_SYSTEM_HAVE_EXIT_SUCCESS)
 check_cxx_symbol_exists (memcpy cstring SWPL_SYSTEM_HAVE_MEMCPY)

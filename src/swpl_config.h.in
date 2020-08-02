@@ -20,6 +20,9 @@
 #cmakedefine	SWPL_SYSTEM_HAVE_CSTDLIB
 #cmakedefine	SWPL_SYSTEM_HAVE_CSTDIO
 #cmakedefine	SWPL_SYSTEM_HAVE_IOSTREAM
+#cmakedefine	SWPL_SYSTEM_HAVE_CSTRING
+#cmakedefine	SWPL_SYSTEM_HAVE_CSTDARG
+#cmakedefine	SWPL_SYSTEM_HAVE_ATOMIC
 #cmakedefine	SWPL_SYSTEM_HAVE_FSTREAM
 #cmakedefine	SWPL_SYSTEM_HAVE_EXCEPTION
 #cmakedefine	SWPL_SYSTEM_HAVE_REGEX
@@ -37,6 +40,9 @@
 /* Automatic checks for critical components. 
  Not all above libraries and files are needed, however some of them are really mandatory.
  Abort if they are not present.
+ 
+ To be honest, those checks will fail only under some abnormal compiler which is not compatible with
+ the mainstream ones.
 */
 
 #ifndef SWPL_SYSTEM_HAVE_CSTDLIB
