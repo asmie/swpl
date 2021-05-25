@@ -81,9 +81,9 @@ find_package(GTest)
 
 if(GTEST_FOUND)
 	include_directories(src ${CMAKE_CURRENT_BINARY_DIR}/generated ${GTEST_INCLUDE_DIR})
-	file(GLOB TEST_SOURCES tests/unit/*.cpp ${SOURCES})
+	file(GLOB TEST_SOURCES tests/unit/*.cpp ${OS_FILES} ConfigurationManager.cpp  )
 	add_executable(${PROJECT_NAME}_unit ${TEST_SOURCES})
-	target_link_libraries(${PROJECT_NAME}_unit PUBLIC ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} )
+	target_link_libraries(${PROJECT_NAME}_unit PUBLIC ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} ${CMAKE_DL_LIBS})
 	add_test(${PROJECT_NAME}_unit_test ${PROJECT_NAME}_unit)
 endif(GTEST_FOUND)
 
