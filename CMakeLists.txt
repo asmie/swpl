@@ -1,7 +1,7 @@
 # CMakeLists file written by Piotr "asmie" Olszewski
 # Project: swpl
 
-cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 project(swpl)
 
 # Versioning
@@ -83,7 +83,7 @@ if(GTEST_FOUND)
 	include_directories(src ${CMAKE_CURRENT_BINARY_DIR}/generated ${GTEST_INCLUDE_DIR})
 	file(GLOB TEST_SOURCES tests/unit/*.cpp ${OS_FILES} ConfigurationManager.cpp  )
 	add_executable(${PROJECT_NAME}_unit ${TEST_SOURCES})
-	target_link_libraries(${PROJECT_NAME}_unit PUBLIC ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} ${CMAKE_DL_LIBS})
+	target_link_libraries(${PROJECT_NAME}_unit PUBLIC GTest::gtest GTest::gtest_main ${CMAKE_DL_LIBS})
 	add_test(${PROJECT_NAME}_unit_test ${PROJECT_NAME}_unit)
 endif(GTEST_FOUND)
 
