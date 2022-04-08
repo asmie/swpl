@@ -22,7 +22,7 @@ if (MSVC)
 else()
     add_compile_options(-Wall -Wextra -Werror -pipe)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3 -ggdb")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -0s")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Os")
 	
 	set(CMAKE_EXE_LINKER_FLAGS "-z now -s")
 endif()
