@@ -1,7 +1,7 @@
 # CMakeLists file written by Piotr "asmie" Olszewski
 # Project: swpl
 
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(swpl)
 
 # Versioning
@@ -56,7 +56,7 @@ configure_file (
   )
 
 # Find source files
-file(GLOB SOURCES src/*.cpp)
+file(GLOB SOURCES src/*.cpp src/config/*.cpp src/core/*.cpp src/ios/*.cpp )
 
 # Include header files
 include_directories(src ${CMAKE_CURRENT_BINARY_DIR}/generated)

@@ -59,8 +59,8 @@ public:
 	}
 
 private:
-	unsigned int _id{0}; /*!< IO identification number */
-	std::string _name{""}; /*!< Name of the IO object - used for user friendly printing */
+	unsigned int _id{0};		/*!< IO identification number */
+	std::string _name{""};		/*!< Name of the IO object - used for user friendly printing */
 	StreamDirection _direction{StreamDirection::BIDIRECTIONAL}; /*!< Direction of the stream */
 
 };
