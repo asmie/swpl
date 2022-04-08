@@ -20,7 +20,7 @@ set(CMAKE_CXX_EXTENSIONS ON)
 if (MSVC)
     add_compile_options(/W4 /WX)
 else()
-    add_compile_options(-Wall -Wextra -Werror -pipe)
+    add_compile_options(-Wall -Wextra -pipe)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3 -ggdb")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Os")
 	

@@ -9,27 +9,12 @@
 
 #include "config/ConfigurationManager.hpp"
 
-#include <memory>
-
-void parseCmdLine(int argc, char **argv);
-
-std::unique_ptr<ConfigurationManager> configurationManager;
-
 int main(int argc, char *argv[])
 {
-	configurationManager = std::make_unique<ConfigurationManager>();
-	parseCmdLine(argc, argv);
+	auto& configurationManager = ConfigurationManager::instance();
+
+	configurationManager.parseConfiguration(argc, argv);
 
 	return 0;
 }
 
-
-
-void parseCmdLine(int argc, char **argv)
-{
-	if (argc > 2 && argv != nullptr)
-	{
-
-	}
-
-}
