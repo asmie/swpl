@@ -54,7 +54,7 @@ Sample configuration file:
 
 ## Bug reporting
 
-Bugs can be reported using [GitHub issue tracker]https://github.com/asmie/swpl/issues).
+Bugs can be reported using [GitHub issue tracker](https://github.com/asmie/swpl/issues).
 
 ## Further development
 stamp-suite handles only one session at the time so it can be used to associate exactly one sender with exactly one reflector. This can be improved in the future as one reflector can handle many senders. Of course, it's simple when we're talking about the stateless mode as the only thing that reflector needs to do is copy original fields and generate own timestamp (in unauthorized mode). The things is going worse when we're talking about the stateful mode and multiple sessions, when some of them can be started and some of them can be terminated. As STAMP does not handles session management itself it needs to be done outside (somehow). Using 4-tuple params is of course problematic as configuring session-reflector for each 4-tuple can drive everybody crazy, using optional session identifiers described in the RFC 8972 seems to be the best way to handle state. 
