@@ -14,6 +14,10 @@
 
 #include <string>
 #include <memory>
+#include <unordered_map>
+
+#include <cfloat>
+#include <climits>
 
 /**
 * Configuration manager class that is responsible for handling application settings. Parses
@@ -22,6 +26,8 @@
 */
 class ConfigurationManager
 {
+	typedef std::unordered_map<std::string, std::unordered_map<std::string, std::string>> ConfigurationStructure;
+
 public:
 	ConfigurationManager(ConfigurationManager const&) = delete;
 	void operator=(ConfigurationManager const&) = delete;
@@ -44,10 +50,19 @@ public:
 	*/
 	void parseConfiguration(int argc, char** argv);
 
+	/**
+	* Get value of the specified key in specified section.
+	* @param[in] section section where key is stored
+	* @param[in] key key to look for
+	*/
+	template<typename T> T get(const std::string& section, const std::string& key);
+
 private:
 	ConfigurationManager() { }
 
-	std::unique_ptr<ConfigurationFile> configurationFile;
+	std::unique_ptr<ConfigurationFile> configurationFile_;
+
+	ConfigurationStructure configuration_;
 
 };
 

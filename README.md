@@ -39,6 +39,11 @@ which should produce binary itself.
 ## Usage
 ### Command line interface
 
+Swpl usage is as follows:
+```
+
+```
+
 ### Configuration file
 
 Configuration file is INI-based file that can be set through the appropriate option in the command line. 

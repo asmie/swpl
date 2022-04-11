@@ -7,36 +7,36 @@
  *  @date   2022.04.22
  */
 
-#ifndef SRC_CONFIGURATIONFILE_HPP_
-#define SRC_CONFIGURATIONFILE_HPP_
+#ifndef SRC_CONFIGURATIONFILEINI_HPP_
+#define SRC_CONFIGURATIONFILEINI_HPP_
+
+#include "ConfigurationFile.hpp"
 
 #include <string>
 #include <unordered_map>
 
  /**
- * Configuration file abstraction.
+ * Configuration stored in INI file.
  */
-class ConfigurationFile
+class ConfigurationFileINI : public ConfigurationFile
 {
 public:
-	typedef std::unordered_map<std::string, std::unordered_map<std::string, std::string>> ConfigurationStructure;
-
 	/**
 	* Default constructor.
 	*/
-	ConfigurationFile() = default;
+	ConfigurationFileINI() = default;
 
 	/**
 	* Default destructor.
 	*/
-	virtual ~ConfigurationFile() = default;
+	virtual ~ConfigurationFileINI() = default;
 
 	/**
 	* Parse specified file and store key=value results in provided map.
 	* @param[in] path path to the file with configuration
 	* @param[out] settings reference to map where configuration will be stored
 	*/
-	virtual void parse(std::string path, ConfigurationStructure& settings) = 0;
+	void parse(std::string path, ConfigurationStructure& settings) override;
 };
 
 
