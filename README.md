@@ -1,7 +1,7 @@
 # swpl
 
 ![CMake](https://github.com/asmie/swpl/actions/workflows/cmake.yml/badge.svg)
-![CodeQL](https://github.com/asmie/swpl/actions/workflows/codeql-analysis.yml/badge.svg)
+![CodeQL](https://github.com/asmie/swpl/actions/workflows/codeql.yml/badge.svg)
 
 SWitchboard PipeLines (swpl) is application dedicated to create pipelanes with stages to connect various inputs and outputs. One can create different stages where data from input is transformed using some operations and then put into the output.
 
@@ -36,11 +36,16 @@ make
 ```
 which should produce binary itself.
 
-
-
 ## Usage
-### Example data
+### Command line interface
 
+### Configuration file
+
+Configuration file is INI-based file that can be set through the appropriate option in the command line. 
+
+Sample configuration file:
+```
+```
 
 ## Bug reporting
 
