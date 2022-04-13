@@ -37,7 +37,7 @@ public:
 	* Gets reference to configuration manager instance.
 	* @return ConfigurationManager instance reference.
 	*/
-	inline static ConfigurationManager& instance()
+	inline static ConfigurationManager& instance() noexcept
 	{
 		static ConfigurationManager instance;		// C++11 and above - assures thread-safeness.
 		return instance;
@@ -48,17 +48,24 @@ public:
 	* @param[in] argc argument count
 	* @param[in] argv pointer to c-like strings containing arguments
 	*/
-	void parseConfiguration(int argc, char** argv);
+	void parseConfiguration(int argc, char** argv) noexcept;
 
 	/**
 	* Get the value from specified key and section - generic version.
 	* @param[in] section section to get key from
 	* @param[in] key key to find
-	* @return The requested value.
+	* @param[out] value place to store the value
+	* @return True if value is valid, otherwise false.
 	*/
-	template<typename T> T get(const std::string& section, const std::string& key);
+	template<typename T> bool get(const std::string& section, const std::string& key, T& value) noexcept;
 
-	bool settingExists(const std::string& section, const std::string& key);
+	/**
+	* Check if specified key exists under given section.
+	* @param[in] section section to get key from
+	* @param[in] key key to find
+	* @return True if key exists otherwise false.
+	*/
+	bool settingExists(const std::string& section, const std::string& key) noexcept;
 
 private:
 	ConfigurationManager() { }
