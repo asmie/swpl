@@ -90,7 +90,7 @@ bool ConfigurationManager::get(const std::string& section, const std::string& ke
 
 	if (settingExists(section, key))
 	{
-		std::string testVal = configurationFile_[section][key];
+		std::string testVal = configuration_[section][key];
 
 		std::transform(testVal.begin(), testVal.end(), testVal.begin(),
 			[](unsigned char c) { return std::tolower(c); });
