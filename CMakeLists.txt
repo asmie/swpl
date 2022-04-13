@@ -56,7 +56,15 @@ configure_file (
   "generated/swpl_config.h"
   )
 
-file(GLOB OS_FILES )
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  file(GLOB OS_FILES src/osdep/linux/*.cpp)
+  set(ADDITIONAL_LIBRARIES "")
+endif()
+
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
+  file(GLOB OS_FILES src/osdep/windows/*.cpp)
+  set(ADDITIONAL_LIBRARIES wsock32)
+endif()
 
 file(GLOB SRC_FILES src/config/*.cpp src/core/*.cpp )
 
@@ -72,7 +80,7 @@ find_package(Threads REQUIRED)
 
 # Create executable
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} Threads::Threads)
+target_link_libraries(${PROJECT_NAME} Threads::Threads ${ADDITIONAL_LIBRARIES})
 
 # Install executable
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -88,7 +96,7 @@ if(GTEST_FOUND)
 	include_directories(src ${CMAKE_CURRENT_BINARY_DIR}/generated ${GTEST_INCLUDE_DIR})
 	file(GLOB TEST_SOURCES tests/unit/*.cpp ${OS_FILES} ${SRC_FILES} )
 	add_executable(${PROJECT_NAME}_unit ${TEST_SOURCES})
-	target_link_libraries(${PROJECT_NAME}_unit PUBLIC gtest pthread ${CMAKE_DL_LIBS})
+	target_link_libraries(${PROJECT_NAME}_unit PUBLIC gtest pthread ${CMAKE_DL_LIBS} ${ADDITIONAL_LIBRARIES})
 	add_test(${PROJECT_NAME}_unit_test ${PROJECT_NAME}_unit)
 endif(GTEST_FOUND)
 
