@@ -51,11 +51,14 @@ public:
 	void parseConfiguration(int argc, char** argv);
 
 	/**
-	* Get value of the specified key in specified section.
-	* @param[in] section section where key is stored
-	* @param[in] key key to look for
+	* Get the value from specified key and section - generic version.
+	* @param[in] section section to get key from
+	* @param[in] key key to find
+	* @return The requested value.
 	*/
 	template<typename T> T get(const std::string& section, const std::string& key);
+
+	bool settingExists(const std::string& section, const std::string& key);
 
 private:
 	ConfigurationManager() { }
