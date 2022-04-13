@@ -56,8 +56,12 @@ configure_file (
   "generated/swpl_config.h"
   )
 
+file(GLOB OS_FILES )
+
+file(GLOB SRC_FILES src/config/*.cpp src/core/*.cpp )
+
 # Find source files
-file(GLOB SOURCES src/*.cpp src/config/*.cpp src/core/*.cpp src/ios/*.cpp )
+file(GLOB SOURCES src/main.cpp ${SRC_FILES} ${OS_FILES} )
 
 # Include header files
 include_directories(src ${CMAKE_CURRENT_BINARY_DIR}/generated)
@@ -82,7 +86,7 @@ find_package(GTest)
 
 if(GTEST_FOUND)
 	include_directories(src ${CMAKE_CURRENT_BINARY_DIR}/generated ${GTEST_INCLUDE_DIR})
-	file(GLOB TEST_SOURCES tests/unit/*.cpp ${OS_FILES} ConfigurationManager.cpp  )
+	file(GLOB TEST_SOURCES tests/unit/*.cpp ${OS_FILES} ${SRC_FILES} )
 	add_executable(${PROJECT_NAME}_unit ${TEST_SOURCES})
 	target_link_libraries(${PROJECT_NAME}_unit PUBLIC gtest pthread ${CMAKE_DL_LIBS})
 	add_test(${PROJECT_NAME}_unit_test ${PROJECT_NAME}_unit)

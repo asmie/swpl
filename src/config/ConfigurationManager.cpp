@@ -177,6 +177,26 @@ bool ConfigurationManager::get(const std::string& section, const std::string& ke
 	return result;
 }
 
+/**
+* Get the value from specified key and section - std::string version.
+* @param[in] section section to get key from
+* @param[in] key key to find
+* @param[out] value place to store the value
+* @return True if value is valid, otherwise false.
+*/
+template<>
+bool ConfigurationManager::get(const std::string& section, const std::string& key, std::string& value) noexcept
+{
+	bool result = false;
+
+	if (settingExists(section, key))
+	{
+		value = configuration_[section][key];
+		result = true;
+	}
+
+	return result;
+}
 
 
 long long convertToLongLong(const std::string& value)
