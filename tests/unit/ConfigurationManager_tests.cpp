@@ -30,5 +30,15 @@ TEST(ConfigurationManager, EmptyConfig)
 	EXPECT_EQ(false, configurationManager.get<bool>("test_section", "test_key", bTestVal));
 	EXPECT_EQ(false, bTestVal);		// Important - testVal should not be changed!
 
+	EXPECT_EQ(false, configurationManager.get<int>("test_section", "test_key", iTestVal));
+	EXPECT_EQ(92, iTestVal);
 
+	EXPECT_EQ(false, configurationManager.get<long>("test_section", "test_key", lTestVal));
+	EXPECT_EQ(991, lTestVal);
+
+	EXPECT_EQ(false, configurationManager.get<double>("test_section", "test_key", dTestVal));
+	EXPECT_EQ(4.22, dTestVal);
+
+	EXPECT_EQ(false, configurationManager.get<std::string>("test_section", "test_key", sTestVal));
+	EXPECT_EQ("testStr", bTestVal);
 }
