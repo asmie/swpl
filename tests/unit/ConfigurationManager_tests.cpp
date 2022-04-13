@@ -40,5 +40,5 @@ TEST(ConfigurationManager, EmptyConfig)
 	EXPECT_EQ(4.22, dTestVal);
 
 	EXPECT_EQ(false, configurationManager.get<std::string>("test_section", "test_key", sTestVal));
-	EXPECT_EQ("testStr", bTestVal);
+	EXPECT_EQ("testStr", sTestVal);
 }
