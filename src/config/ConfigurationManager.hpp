@@ -16,9 +16,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include <cfloat>
-#include <climits>
-
 /**
 * Configuration manager class that is responsible for handling application settings. Parses
 * command line arguments and if needed manages parsing file with configuration.

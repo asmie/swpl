@@ -14,19 +14,22 @@
 #include <fstream>
 #include <regex>
 
+#include <cfloat>
+#include <climits>
+
  /**
   * Convert std::string to long long.
   *
   * @param[in] value value to be converted
-  * @return Long long based on the converted value. Exception or 0 is returned if error.
+  * @return Long long based on the converted value. Exception is returned if error.
   */
 long long convertToLongLong(const std::string& value);
 
 /**
- * Convert std::string to long long.
+ * Convert std::string to double.
  *
  * @param[in] value value to be converted
- * @return Long long based on the converted value. 0 if error.
+ * @return Long long based on the converted value. Exception is returned if error.
  */
 double convertToDouble(const std::string& value);
 
@@ -65,7 +68,7 @@ bool ConfigurationManager::settingExists(const std::string& section, const std::
 
 	try 
 	{
-		configuration_.at(section).at(key);
+		auto& test = configuration_.at(section).at(key);
 	}
 	catch (std::out_of_range&) 
 	{
@@ -202,7 +205,7 @@ bool ConfigurationManager::get(const std::string& section, const std::string& ke
 long long convertToLongLong(const std::string& value)
 {
 	std::smatch matcher;
-	std::regex  numberRegex(R"~(^\s*(\-?\d+)\s*$)~");
+	std::regex  numberRegex(R"~(^\s*([+-]?\d+)\s*$)~");
 
 	if (std::regex_match(value, matcher, numberRegex))
 		return std::strtoll(matcher[1].str().c_str(), nullptr, 10);
@@ -217,7 +220,7 @@ double convertToDouble(const std::string& value)
 	std::regex  numberRegex(R"~(^\s*([+-]?(\d+([.]\d*)?([eE][+-]?\d+)?|[.]\d+([eE][+-]?\d+)?))\s*$)~");;
 
 	if (std::regex_match(value, matcher, numberRegex))
-		return std::strtold(matcher[1].str().c_str(), nullptr);
+		return static_cast<double>(std::strtold(matcher[1].str().c_str(), nullptr));
 	else
 		throw std::runtime_error("bad conversion");
 }
