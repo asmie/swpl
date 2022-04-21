@@ -155,6 +155,17 @@ public:
 	}
 
 private:
+	/**
+	* Helper method to async reading.
+	*/
+	virtual void async_read_worker(std::array<char>& buffer, size_t readMax = 0, Callback_t rxCallback = nullptr);
+
+	/**
+	* Helper method to async writing.
+	*/
+	virtual void async_write_worker(const std::array<char>& buffer, size_t writeMax = 0, Callback_t txCallback = nullptr);
+
+
 	unsigned int id_{0};		/*!< IO identification number */
 	std::string name_{""};		/*!< Name of the IO object - used for user friendly printing */
 	StreamDirection direction_{StreamDirection::BIDIRECTIONAL}; /*!< Direction of the stream */
