@@ -49,7 +49,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	IO(unsigned int id, std::string name, StreamDirection direction) : id_(id), name_(name), direction_(direction) {}
+	IO(unsigned int id, std::string name, StreamDirection direction) : id_(id), name_(name), direction_(direction), rxCallback_(nullptr), txCallback_(nullptr) {}
 	
 	/**
 	* Default destructor.
@@ -84,21 +84,71 @@ public:
 	*/
 	virtual ssize_t write(const std::array<char>& buffer, size_t writeMax = 0) = 0;
 
-	virtual ssize_t async_read(std::array<char>& buffer, size_t readMax = 0) = 0;
-	virtual ssize_t async_write(const std::array<char>& buffer, size_t writeMax = 0) = 0;
+	/**
+	* Async read method. Takes reference to buffer and two optional parameters - max read chars 
+	* (readMax <= buffer.max_size()) and rxCallback. If no callback is given then it is used default one
+	* that should be set using register_callbacks() method. If there is still no possible callback then
+	* method will fail. This is the default implementation.
+	* @param[out] buffer buffer where read bytes will be stored
+	* @param[in] readMax read max bytes - 0 means read buffer.max_size() bytes
+	* @param[in] rxCallback call rxCallback instead of remembered function
+	* @return True if everything is ok, otherwise false.l
+	*/
+	virtual bool async_read(std::array<char>& buffer, size_t readMax = 0, Callback_t rxCallback = nullptr);
 
-	virtual bool register_callbacks(Callback_t rxCallback, Callback_t txCallback) = 0;
+	/**
+	* Async write method. Takes reference to buffer and two optional parameters - max write bytes
+	* (writedMax <= buffer.max_size()) and txCallback. If no callback is given then it is used default one
+	* that should be set using register_callbacks() method. If there is still no possible callback then
+	* method will fail. This is the default implementation.
+	* @param[in] buffer buffer where read bytes will be stored
+	* @param[in] readMax read max bytes - 0 means read buffer.max_size() bytes
+	* @param[in] rxCallback call rxCallback instead of remembered function
+	* @return True if everything is ok, otherwise false.
+	*/
+	virtual bool async_write(const std::array<char>& buffer, size_t writeMax = 0, Callback_t txCallback = nullptr);
 
+	/**
+	* Set RX callback to be executed upon async_read is completed.
+	* @param[in] rxCallback callback to call when async_read is completed.
+	*/
+	virtual void register_rx_callback(Callback_t rxCallback)
+	{
+		rxCallback_ = rxCallback;
+	}
+
+	/**
+	* Set TX callback to be executed when async_write is completed.
+	* @param[in] txCallback callback to be called when async_write is completed.
+	*/
+	virtual void register_tx_callback(Callback_t txCallback)
+	{
+		txCallback_ = txCallback;
+	}
+
+	/**
+	* Check if two streams are the same.
+	* @param[in] rhs IO object to be compared
+	* @return True if streams have the same ID, otherwise false.
+	*/
 	virtual bool operator==(const IO &rhs)
 	{
 		return (rhs.id_ == id_);
 	}
 
+	/**
+	* Get IO object ID.
+	* @return ID of the object.
+	*/
 	unsigned int getID() const
 	{
 		return id_;
 	}
 
+	/**
+	* Get name of the IO object.
+	* @return Name of the IO object.
+	*/
 	std::string getName() const
 	{
 		return name_;
@@ -109,8 +159,8 @@ private:
 	std::string name_{""};		/*!< Name of the IO object - used for user friendly printing */
 	StreamDirection direction_{StreamDirection::BIDIRECTIONAL}; /*!< Direction of the stream */
 
-	Callback_t rxCallback_;
-	Callback_t txCallback_;
+	Callback_t rxCallback_;		/*!< RX callback function */
+	Callback_t txCallback_;		/*!< TX callback function */
 };
 
 } /* namespace swpl */

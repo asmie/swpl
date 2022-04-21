@@ -12,9 +12,9 @@ SWitchboard PipeLines (swpl) is application dedicated to create pipelanes with s
 ### Prerequisites
 
 Application has no external dependencies. swpl demands:
-* compiler compatible with GCC, Clang or MSVC, supporting at least C++14 standard;
+* compiler compatible with GCC, Clang or MSVC, supporting at least C++17 standard;
 * standard C++ library;
-* cmake 3.14 or newer.
+* cmake 3.16 or newer.
 
 To properly build and run tests there is a need to have:
 * gtest that can be found by cmake buildsystem.
