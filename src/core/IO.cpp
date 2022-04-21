@@ -14,40 +14,41 @@ using namespace swpl;
 
 #include <thread>
 #include <atomic>
+#include <functional>
 
-bool IO::async_read(std::array<char>& buffer, size_t readMax = 0, Callback_t rxCallback = nullptr)
+bool IO::async_read(std::vector<char>& buffer, size_t readMax, rxCallback_t rxCallback)
 {
 	if (rxCallback == nullptr || rxCallback_ == nullptr)
 		return false;
 
-	std::thread read_worker(&IO::async_read_worker, this, buffer, readMax, rxCallback == nullptr ? rxCallback_ : rxCallback);
+	std::thread read_worker(&IO::async_read_worker, this, std::ref(buffer), readMax, rxCallback == nullptr ? rxCallback_ : rxCallback);
 	read_worker.detach();
 
 	return true;
 }
 
-bool IO::async_write(const std::array<char>& buffer, size_t writeMax = 0, Callback_t txCallback = nullptr)
+bool IO::async_write(const std::vector<char>& buffer, size_t writeMax, txCallback_t txCallback)
 {
 	if (txCallback == nullptr || txCallback_ == nullptr)
 		return false;
 
-	std::thread write_worker(&IO::async_write_worker, this, buffer, writeMax, txCallback == nullptr ? txCallback_ : txCallback);
-	read_worker.detach();
+	std::thread write_worker(&IO::async_write_worker, this, std::ref(buffer), writeMax, txCallback == nullptr ? txCallback_ : txCallback);
+	write_worker.detach();
 
 	return true;
 }
 
 
-void IO::async_read_worker(std::array<char>& buffer, size_t readMax = 0, Callback_t rxCallback = nullptr)
+void IO::async_read_worker(std::vector<char>& buffer, size_t readMax, rxCallback_t rxCallback)
 {
 	auto ret = read(buffer, readMax);
 	
 	rxCallback(buffer, ret);
 }
 
-void IO::async_write_worker(const std::array<char>& buffer, size_t writeMax = 0, Callback_t txCallback = nullptr)
+void IO::async_write_worker(const std::vector<char>& buffer, size_t writeMax, txCallback_t txCallback)
 {
-	auto ret = write(buffer, readMax);
+	auto ret = write(buffer, writeMax);
 
 	txCallback(buffer, ret);
 }

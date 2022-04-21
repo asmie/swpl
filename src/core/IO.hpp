@@ -15,7 +15,7 @@
 #include <cstdlib>
 #include <string>
 #include <functional>
-#include <array>
+#include <vector>
 
 namespace swpl {
 
@@ -36,7 +36,8 @@ enum class StreamDirection {
 class IO
 {
 public:
-	typedef std::function<void(std::array<char>&, ssize_t)> Callback_t;
+	typedef std::function<void(std::vector<char>&, ssize_t)> rxCallback_t;
+	typedef std::function<void(const std::vector<char>&, ssize_t)> txCallback_t;
 
 	/**
 	* Default constructor of the class objects.
@@ -74,7 +75,7 @@ public:
 	* @param[in] readMax max bytes to read (must be less than buffer.max_size()).
 	* @return Bytes read and stored in the buffer or negative if error occured.
 	*/
-	virtual ssize_t read(std::array<char>& buffer, size_t readMax = 0) = 0;
+	virtual ssize_t read(std::vector<char>& buffer, size_t readMax = 0) = 0;
 
 	/**
 	* Write at most writeMax bytes into the stream from the buffer.
@@ -82,7 +83,7 @@ public:
 	* @param[in] writeMax max bytes to be written into the stream
 	* @return Bytes written to the stream or negative if error occured.
 	*/
-	virtual ssize_t write(const std::array<char>& buffer, size_t writeMax = 0) = 0;
+	virtual ssize_t write(const std::vector<char>& buffer, size_t writeMax = 0) = 0;
 
 	/**
 	* Async read method. Takes reference to buffer and two optional parameters - max read chars 
@@ -94,7 +95,7 @@ public:
 	* @param[in] rxCallback call rxCallback instead of remembered function
 	* @return True if everything is ok, otherwise false.l
 	*/
-	virtual bool async_read(std::array<char>& buffer, size_t readMax = 0, Callback_t rxCallback = nullptr);
+	virtual bool async_read(std::vector<char>& buffer, size_t readMax = 0, rxCallback_t rxCallback = nullptr);
 
 	/**
 	* Async write method. Takes reference to buffer and two optional parameters - max write bytes
@@ -106,13 +107,13 @@ public:
 	* @param[in] rxCallback call rxCallback instead of remembered function
 	* @return True if everything is ok, otherwise false.
 	*/
-	virtual bool async_write(const std::array<char>& buffer, size_t writeMax = 0, Callback_t txCallback = nullptr);
+	virtual bool async_write(const std::vector<char>& buffer, size_t writeMax = 0, txCallback_t txCallback = nullptr);
 
 	/**
 	* Set RX callback to be executed upon async_read is completed.
 	* @param[in] rxCallback callback to call when async_read is completed.
 	*/
-	virtual void register_rx_callback(Callback_t rxCallback)
+	virtual void register_rx_callback(rxCallback_t rxCallback)
 	{
 		rxCallback_ = rxCallback;
 	}
@@ -121,7 +122,7 @@ public:
 	* Set TX callback to be executed when async_write is completed.
 	* @param[in] txCallback callback to be called when async_write is completed.
 	*/
-	virtual void register_tx_callback(Callback_t txCallback)
+	virtual void register_tx_callback(txCallback_t txCallback)
 	{
 		txCallback_ = txCallback;
 	}
@@ -158,20 +159,20 @@ private:
 	/**
 	* Helper method to async reading.
 	*/
-	virtual void async_read_worker(std::array<char>& buffer, size_t readMax = 0, Callback_t rxCallback = nullptr);
+	virtual void async_read_worker(std::vector<char>& buffer, size_t readMax = 0, rxCallback_t rxCallback = nullptr);
 
 	/**
 	* Helper method to async writing.
 	*/
-	virtual void async_write_worker(const std::array<char>& buffer, size_t writeMax = 0, Callback_t txCallback = nullptr);
+	virtual void async_write_worker(const std::vector<char>& buffer, size_t writeMax = 0, txCallback_t txCallback = nullptr);
 
 
 	unsigned int id_{0};		/*!< IO identification number */
 	std::string name_{""};		/*!< Name of the IO object - used for user friendly printing */
 	StreamDirection direction_{StreamDirection::BIDIRECTIONAL}; /*!< Direction of the stream */
 
-	Callback_t rxCallback_;		/*!< RX callback function */
-	Callback_t txCallback_;		/*!< TX callback function */
+	rxCallback_t rxCallback_;		/*!< RX callback function */
+	txCallback_t txCallback_;		/*!< TX callback function */
 };
 
 } /* namespace swpl */
