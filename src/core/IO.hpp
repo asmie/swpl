@@ -163,6 +163,15 @@ public:
 		return name_;
 	}
 
+	/**
+	* Get stream direction.
+	* @return Stream direction.
+	*/
+	StreamDirection getDirection() const
+	{
+		return direction_;
+	}
+
 private:
 	/**
 	* Helper method to async reading.

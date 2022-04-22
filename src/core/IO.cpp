@@ -10,7 +10,6 @@
  */
 
 #include "IO.hpp"
-using namespace swpl;
 
 #include <thread>
 #include <atomic>
