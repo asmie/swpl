@@ -17,7 +17,7 @@
 #include <functional>
 #include <vector>
 
-namespace swpl {
+class ConfigurationManager;
 
 /**
 * Stream direction - defines whether stream is only input stream (read), output (write) or 
@@ -56,6 +56,14 @@ public:
 	* Default destructor.
 	*/
 	virtual ~IO() = default;
+
+	/**
+	* Method allowing module to configure itself using external configuration source.
+	* @param[in] config reference to the configuration manager facility
+	* @param[in] section place where module configuration is stored
+	* @return True if configuration is valid, otherwise false.
+	*/
+	virtual bool configure(const ConfigurationManager& config, const std::string section) = 0;
 
 	/**
 	* Opens stream. Each stream needs to be opened before usage but after configuration.
@@ -174,7 +182,5 @@ private:
 	rxCallback_t rxCallback_;		/*!< RX callback function */
 	txCallback_t txCallback_;		/*!< TX callback function */
 };
-
-} /* namespace swpl */
 
 #endif /* SRC_IO_HPP_ */
