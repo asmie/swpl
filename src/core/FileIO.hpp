@@ -9,6 +9,9 @@
  *  This file contains the class for manipulating files.
  */
 
+#ifndef SRC_FILEIO_HPP_
+#define SRC_FILEIO_HPP_
+
 #include "IO.hpp"
 
 #include <fstream>
@@ -62,3 +65,5 @@ private:
 	std::mutex readLock_;
 	std::mutex writeLock_;
 };
+
+#endif /* SRC_FILEIO_HPP_ */

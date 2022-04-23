@@ -12,6 +12,8 @@
 #ifndef SRC_IO_HPP_
 #define SRC_IO_HPP_
 
+#include "Global.h"
+
 #include <cstdlib>
 #include <string>
 #include <functional>

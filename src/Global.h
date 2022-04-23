@@ -18,4 +18,9 @@
 
 
 
+#if defined(_MSC_VER)
+#include <basetsd.h>
+typedef SSIZE_T ssize_t;
+#endif
+
 #endif /* SWPL_SRC_GLOBAL_H_ */

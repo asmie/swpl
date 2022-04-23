@@ -9,6 +9,9 @@
  *  This file contains the class for manipulating devices.
  */
 
+#ifndef SRC_DEVICEIO_HPP_
+#define SRC_DEVICEIO_HPP_
+
 #include "IO.hpp"
 
 #include <cstdlib>
@@ -61,3 +64,5 @@ private:
 	std::mutex readLock_;
 	std::mutex writeLock_;
 };
+
+#endif /* SRC_DEVICEIO_HPP_ */
