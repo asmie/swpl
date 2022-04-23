@@ -22,7 +22,9 @@ FileIO::~FileIO()
 
 bool FileIO::configure(const ConfigurationManager& config, const std::string section) 
 {
+	bool configurationCorrect = false;
 
+	return configurationCorrect;
 }
 
 int FileIO::open() 

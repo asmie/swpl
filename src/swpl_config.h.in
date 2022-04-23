@@ -28,6 +28,10 @@
 #cmakedefine	SWPL_SYSTEM_HAVE_REGEX
 #cmakedefine	SWPL_SYSTEM_HAVE_UNORDERED_MAP
 
+#cmakedefine	SWPL_SYSTEM_HAVE_FCNTL_H
+#cmakedefine	SWPL_SYSTEM_HAVE_IO_H
+#cmakedefine	SWPL_SYSTEM_HAVE_UNISTD_H
+
 // System function checks
 #cmakedefine  	SWPL_SYSTEM_HAVE_EXIT_SUCCESS
 #cmakedefine  	SWPL_SYSTEM_HAVE_MEMCPY

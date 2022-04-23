@@ -1,39 +1,38 @@
 /**
- *  @file   FileIO.hpp
- *  @brief  File input/output .
+ *  @file   DeviceIO.hpp
+ *  @brief  Device input/output .
  *
  *  @author Piotr Olszewski
  *
  *  @date   2022.04.22
  *
- *  This file contains the class for manipulating files.
+ *  This file contains the class for manipulating devices.
  */
 
 #include "IO.hpp"
 
-#include <fstream>
+#include <cstdlib>
 #include <mutex>
 
-/**
-* Class for reading files using IO interface.
-*/
-class FileIO : public IO
+ /**
+ * Class for reading files using IO interface.
+ */
+class DeviceIO : public IO
 {
 public:
-	FileIO() = default;
-	FileIO(std::string fileName, unsigned int id, std::string name, StreamDirection direction) : IO(id, name, direction), fileName_(fileName) { }
-	virtual ~FileIO() override;
+	DeviceIO() = default;
+	DeviceIO(std::string devicePath, unsigned int id, std::string name, StreamDirection direction) : devicePath_(devicePath), devFd_(-1), IO(id, name, direction) { }
+	virtual ~DeviceIO() override;
 
 	/**
 	* Demanded configuration:
 	* [section_name]
-	* type = "file"
-	* file = "path to file"
-	* 
+	* type = "device"
+	* file = "path to device"
+	*
 	* Optional configuration:
 	* direction = input/output/bidirectional		# def: bidirectional
 	* binary = true/false							# def: false
-	* append = true/false							# def: false - only for bi/output
 	* read_chunk = 128								# read chunks - only for bi/input
 	* write_chunk = 128								# write chunks - onlu for bi/output
 	*/
@@ -56,8 +55,8 @@ public:
 	virtual ssize_t write(const std::vector<char>& buffer, size_t writeMax = 0) override;
 
 private:
-	std::string fileName_;
-	std::fstream fileStream_;
+	std::string devicePath_;
+	int devFd_;
 
 	std::mutex readLock_;
 	std::mutex writeLock_;

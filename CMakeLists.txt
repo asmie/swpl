@@ -43,6 +43,10 @@ check_include_file_cxx (exception SWPL_SYSTEM_HAVE_EXCEPTION)
 check_include_file_cxx (regex SWPL_SYSTEM_HAVE_REGEX)
 check_include_file_cxx (unordered_map SWPL_SYSTEM_HAVE_UNORDERED_MAP)
 
+check_include_file_cxx (fcntl.h SWPL_SYSTEM_HAVE_FCNTL_H)
+check_include_file_cxx (io.h SWPL_SYSTEM_HAVE_IO_H)
+check_include_file_cxx (unistd.h SWPL_SYSTEM_HAVE_UNISTD_H)
+
 check_cxx_symbol_exists (EXIT_SUCCESS cstdlib SWPL_SYSTEM_HAVE_EXIT_SUCCESS)
 check_cxx_symbol_exists (memcpy cstring SWPL_SYSTEM_HAVE_MEMCPY)
 check_cxx_symbol_exists (vsyslog syslog.h SWPL_SYSTEM_HAVE_VSYSLOG)
@@ -59,11 +63,13 @@ configure_file (
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   file(GLOB OS_FILES src/osdep/linux/*.cpp)
   set(ADDITIONAL_LIBRARIES "")
+  add_compile_definitions(OS_BUILD_LINUX)
 endif()
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   file(GLOB OS_FILES src/osdep/windows/*.cpp)
   set(ADDITIONAL_LIBRARIES wsock32)
+  add_compile_definitions(OS_BUILD_WINDOWS)
 endif()
 
 file(GLOB SRC_FILES src/config/*.cpp src/core/*.cpp )
