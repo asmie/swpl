@@ -62,7 +62,7 @@ configure_file (
 
 if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
   file(GLOB OS_FILES src/osdep/linux/*.cpp)
-  set(ADDITIONAL_LIBRARIES "")
+  set(ADDITIONAL_LIBRARIES dl)
   add_compile_definitions(OS_BUILD_LINUX)
 endif()
 
