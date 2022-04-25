@@ -16,6 +16,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <string_view>
 #include <functional>
 #include <vector>
 
@@ -65,7 +66,7 @@ public:
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
 	*/
-	virtual bool configure(const ConfigurationManager& config, const std::string section) = 0;
+	virtual bool configure(ConfigurationManager& config, const std::string section) = 0;
 
 	/**
 	* Opens stream. Each stream needs to be opened before usage but after configuration.

@@ -45,7 +45,7 @@ DeviceIO::~DeviceIO()
 
 }
 
-bool DeviceIO::configure(const ConfigurationManager& config, const std::string section)
+bool DeviceIO::configure(ConfigurationManager& config, const std::string section)
 {
 	bool configurationCorrect = false;
 

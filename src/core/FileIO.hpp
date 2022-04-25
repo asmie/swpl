@@ -59,7 +59,7 @@ public:
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
 	*/
-	virtual bool configure(const ConfigurationManager& config, const std::string section) override;
+	virtual bool configure(ConfigurationManager& config, const std::string section) override;
 
 	/**
 	* Opens file. File must be opened before any operation and remains open util close() call.

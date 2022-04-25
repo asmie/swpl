@@ -10,19 +10,37 @@
  */
 
 #include "FileIO.hpp"
+#include "config/ConfigurationManager.hpp"
 
 #include <fstream>
 #include <cerrno>
 #include <mutex>
+#include <string_view>
+
+constexpr std::string_view SETT_TYPE = "type";
+constexpr std::string_view SETT_FILE = "file";
+constexpr std::string_view SETT_DIRECTION = "direction";
+constexpr std::string_view SETT_BINARY = "binary";
+constexpr std::string_view SETT_APPEND = "append";
+constexpr std::string_view SETT_R_CHUNK = "read_chunk";
+constexpr std::string_view SETT_W_CHUNK = "write_chunk";
 
 FileIO::~FileIO() 
 {
 
 }
 
-bool FileIO::configure(const ConfigurationManager& config, const std::string section) 
+bool FileIO::configure(ConfigurationManager& config, const std::string section) 
 {
 	bool configurationCorrect = false;
+	std::string val;
+
+	bool res = config.get(section, "type", val);
+
+	if (val != "file")
+	{
+		configurationCorrect = false;
+	}
 
 	return configurationCorrect;
 }

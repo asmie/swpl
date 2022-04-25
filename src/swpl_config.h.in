@@ -27,6 +27,9 @@
 #cmakedefine	SWPL_SYSTEM_HAVE_EXCEPTION
 #cmakedefine	SWPL_SYSTEM_HAVE_REGEX
 #cmakedefine	SWPL_SYSTEM_HAVE_UNORDERED_MAP
+#cmakedefine	SWPL_SYSTEM_HAVE_VECTOR
+#cmakedefine	SWPL_SYSTEM_HAVE_STRING_VIEW
+#cmakedefine	SWPL_SYSTEM_HAVE_FUNCTIONAL
 
 #cmakedefine	SWPL_SYSTEM_HAVE_FCNTL_H
 #cmakedefine	SWPL_SYSTEM_HAVE_IO_H
@@ -49,44 +52,18 @@
  the mainstream ones.
 */
 
-#ifndef SWPL_SYSTEM_HAVE_CSTDLIB
-#error "swpl has to use standard C library!"
+// These checks are critical - if we detect here that some of the files are missing then we know
+// that compiler is somethig weird - either is incomplete or really, really non-standard.
+
+#if !defined(SWPL_SYSTEM_HAVE_CSTDLIB) || !defined(SWPL_SYSTEM_HAVE_CSTDIO) || !defined(SWPL_SYSTEM_HAVE_IOSTREAM) || \
+	!defined(SWPL_SYSTEM_HAVE_CSTRING) || !defined(SWPL_SYSTEM_HAVE_CSTDARG) || !defined(SWPL_SYSTEM_HAVE_ATOMIC) || \
+	!defined(SWPL_SYSTEM_HAVE_REGEX) || !defined(SWPL_SYSTEM_HAVE_FSTREAM) || !defined(SWPL_SYSTEM_HAVE_EXCEPTION) || \
+	!defined(SWPL_SYSTEM_HAVE_UNORDERED_MAP) || !defined(SWPL_SYSTEM_HAVE_VECTOR) || !defined(SWPL_SYSTEM_HAVE_STRING_VIEW) || \
+	!defined(SWPL_SYSTEM_HAVE_FUNCTIONAL)
+#error "Compiler without some critical headers detected!"
 #endif
 
-#ifndef SWPL_SYSTEM_HAVE_CSTDIO
-#error "swpl has to use standard C input\output!"
-#endif
+// Here will go checks that may be optional for the compiler but are essential for swpl to work.
 
-#ifndef SWPL_SYSTEM_HAVE_IOSTREAM
-#error "swpl has to use standard C++ streams!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_CSTRING
-#error "swpl has to use standard C string functions!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_CSTDARG
-#error "swpl has to use standard C standard variadic arguments!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_ATOMIC
-#error "swpl has to use standard C++ atomics!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_REGEX
-#error "swpl has to use standard C++ regex!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_FSTREAM
-#error "swpl has to use standard C++ file streams!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_EXCEPTION
-#error "swpl has to use standard C++ exceptions!"
-#endif
-
-#ifndef SWPL_SYSTEM_HAVE_UNORDERED_MAP
-#error "SWPL has to use standard C++ unordered_map!"
-#endif
 
 #endif /* GENERATED_SWPL_H_IN */
