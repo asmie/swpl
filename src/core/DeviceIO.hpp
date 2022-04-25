@@ -35,7 +35,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	DeviceIO(std::string devicePath, unsigned int id, std::string name, StreamDirection direction) : IO(id, name, direction), devicePath_(devicePath), devFd_(-1) { }
+	DeviceIO(const std::string& devicePath, unsigned int id, const std::string& name, StreamDirection direction) : IO(id, name, direction), devicePath_(devicePath), devFd_(-1) { }
 	
 	/**
 	* Object destructor.
@@ -58,7 +58,7 @@ public:
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
 	*/
-	virtual bool configure(ConfigurationManager& config, const std::string section) override;
+	virtual bool configure(ConfigurationManager& config, const std::string& section) override;
 
 	/**
 	* Opens device. Device must be opened before any operation and remains open util close() call.

@@ -53,7 +53,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	IO(unsigned int id, std::string name, StreamDirection direction) : id_(id), name_(name), direction_(direction), rxCallback_(nullptr), txCallback_(nullptr) {}
+	IO(unsigned int id, const std::string& name, StreamDirection direction) : id_(id), name_(name), direction_(direction), rxCallback_(nullptr), txCallback_(nullptr) {}
 	
 	/**
 	* Default destructor.
@@ -66,7 +66,7 @@ public:
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
 	*/
-	virtual bool configure(ConfigurationManager& config, const std::string section) = 0;
+	virtual bool configure(ConfigurationManager& config, const std::string& section) = 0;
 
 	/**
 	* Opens stream. Each stream needs to be opened before usage but after configuration.

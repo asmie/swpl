@@ -30,7 +30,7 @@ FileIO::~FileIO()
 
 }
 
-bool FileIO::configure(ConfigurationManager& config, const std::string section) 
+bool FileIO::configure(ConfigurationManager& config, const std::string& section)
 {
 	bool configurationCorrect = false;
 	std::string val;

@@ -35,7 +35,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	FileIO(std::string fileName, unsigned int id, std::string name, StreamDirection direction) : IO(id, name, direction), fileName_(fileName) { }
+	FileIO(const std::string& fileName, unsigned int id, const std::string& name, StreamDirection direction) : IO(id, name, direction), fileName_(fileName) { }
 	
 	/**
 	* Default destructor.
@@ -59,7 +59,7 @@ public:
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
 	*/
-	virtual bool configure(ConfigurationManager& config, const std::string section) override;
+	virtual bool configure(ConfigurationManager& config, const std::string& section) override;
 
 	/**
 	* Opens file. File must be opened before any operation and remains open util close() call.
