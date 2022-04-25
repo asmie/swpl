@@ -21,7 +21,6 @@
 #cmakedefine	SWPL_SYSTEM_HAVE_CSTDIO
 #cmakedefine	SWPL_SYSTEM_HAVE_IOSTREAM
 #cmakedefine	SWPL_SYSTEM_HAVE_CSTRING
-#cmakedefine	SWPL_SYSTEM_HAVE_CSTDARG
 #cmakedefine	SWPL_SYSTEM_HAVE_ATOMIC
 #cmakedefine	SWPL_SYSTEM_HAVE_FSTREAM
 #cmakedefine	SWPL_SYSTEM_HAVE_EXCEPTION
@@ -56,10 +55,9 @@
 // that compiler is somethig weird - either is incomplete or really, really non-standard.
 
 #if !defined(SWPL_SYSTEM_HAVE_CSTDLIB) || !defined(SWPL_SYSTEM_HAVE_CSTDIO) || !defined(SWPL_SYSTEM_HAVE_IOSTREAM) || \
-	!defined(SWPL_SYSTEM_HAVE_CSTRING) || !defined(SWPL_SYSTEM_HAVE_CSTDARG) || !defined(SWPL_SYSTEM_HAVE_ATOMIC) || \
+	!defined(SWPL_SYSTEM_HAVE_CSTRING) || !defined(SWPL_SYSTEM_HAVE_FUNCTIONAL) || !defined(SWPL_SYSTEM_HAVE_ATOMIC) || \
 	!defined(SWPL_SYSTEM_HAVE_REGEX) || !defined(SWPL_SYSTEM_HAVE_FSTREAM) || !defined(SWPL_SYSTEM_HAVE_EXCEPTION) || \
-	!defined(SWPL_SYSTEM_HAVE_UNORDERED_MAP) || !defined(SWPL_SYSTEM_HAVE_VECTOR) || !defined(SWPL_SYSTEM_HAVE_STRING_VIEW) || \
-	!defined(SWPL_SYSTEM_HAVE_FUNCTIONAL)
+	!defined(SWPL_SYSTEM_HAVE_UNORDERED_MAP) || !defined(SWPL_SYSTEM_HAVE_VECTOR) || !defined(SWPL_SYSTEM_HAVE_STRING_VIEW) 	
 #error "Compiler without some critical headers detected!"
 #endif
 
