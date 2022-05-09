@@ -12,7 +12,7 @@
 #ifndef SRC_DEVICEIO_HPP_
 #define SRC_DEVICEIO_HPP_
 
-#include "IO.hpp"
+#include "core/IO.hpp"
 
 #include <cstdlib>
 #include <mutex>
