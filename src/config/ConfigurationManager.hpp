@@ -20,6 +20,8 @@
 * Configuration manager class that is responsible for handling application settings. Parses
 * command line arguments and if needed manages parsing file with configuration.
 * Implements singleton pattern as there is always only one, global configuration. 
+* This implementation follow the exception described in:
+* https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Ri-singleton
 */
 class ConfigurationManager
 {

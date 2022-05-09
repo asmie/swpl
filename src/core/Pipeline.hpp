@@ -12,7 +12,9 @@
 
 #include "Global.h"
 
-namespace swpl {
+#include "Stage.hpp"
+
+#include <deque>
 
 class Pipeline
 {
@@ -26,11 +28,9 @@ public:
 	int resume();
 
 private:
-
+	
 
 };
 
-
-} /* namespace swpl */
 
 #endif /* SRC_PIPELINE_HPP_ */

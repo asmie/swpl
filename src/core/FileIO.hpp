@@ -53,8 +53,10 @@ public:
 	* direction = input/output/bidirectional		# def: bidirectional
 	* binary = true/false							# def: false
 	* append = true/false							# def: false - only for bi/output
-	* read_chunk = 128								# read chunks - only for bi/input
-	* write_chunk = 128								# write chunks - onlu for bi/output
+	* read_chunk_min = 0							# read chunks - only for bi/input
+	* read_chunk_max = 128							# read chunks - only for bi/input
+	* write_chunk_min = 0							# write chunks - onlu for bi/output
+	* write_chunk_max = 128							# write chunks - onlu for bi/output
 	* @param[in] config reference to the configuration manager facility
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
