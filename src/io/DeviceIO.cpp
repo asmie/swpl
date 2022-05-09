@@ -59,7 +59,7 @@ int DeviceIO::open()
 	if (devFd_ < 0)
 	{
 		int flags = 0;
-		switch (getDirection())
+		switch (getConfiguration().getDirection())
 		{
 		case StreamDirection::BIDIRECTIONAL:
 			flags = O_RDWR; break;
@@ -106,7 +106,7 @@ ssize_t DeviceIO::read(std::vector<char>& buffer, size_t readMax)
 
 	std::lock_guard<std::mutex> guard(readLock_);
 
-	if (getDirection() == StreamDirection::OUTPUT)
+	if (getConfiguration().getDirection() == StreamDirection::OUTPUT)
 		return -EINVAL;
 
 	if (devFd_ < 0)
@@ -137,7 +137,7 @@ ssize_t DeviceIO::write(const std::vector<char>& buffer, size_t writeMax)
 
 	std::lock_guard<std::mutex> guard(writeLock_);
 
-	if (getDirection() == StreamDirection::INPUT)
+	if (getConfiguration().getDirection() == StreamDirection::INPUT)
 		return -EINVAL;
 
 	if (devFd_ < 0)

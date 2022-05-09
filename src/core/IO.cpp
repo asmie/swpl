@@ -10,10 +10,17 @@
  */
 
 #include "IO.hpp"
+#include "config/ConfigurationManager.hpp"
 
 #include <thread>
 #include <atomic>
 #include <functional>
+
+
+bool IO::configure(ConfigurationManager& config, const std::string& section)
+{
+	return currentConfiguration_.configure(config, section);
+}
 
 bool IO::async_read(std::vector<char>& buffer, size_t readMax, rxCallback_t rxCallback)
 {

@@ -35,7 +35,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	DeviceIO(const std::string& devicePath, unsigned int id, const std::string& name, StreamDirection direction) : IO(id, name, direction), devicePath_(devicePath), devFd_(-1) { }
+	DeviceIO(const std::string& devicePath, StreamDirection direction) : devicePath_(devicePath), devFd_(-1) { }
 	
 	/**
 	* Object destructor.

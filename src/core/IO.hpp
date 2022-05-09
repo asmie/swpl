@@ -13,6 +13,8 @@
 #define SRC_IO_HPP_
 
 #include "Global.h"
+#include "IOconfiguration.hpp"
+#include "Configurable.hpp"
 
 #include <cstdlib>
 #include <string>
@@ -20,23 +22,11 @@
 #include <functional>
 #include <vector>
 
-class ConfigurationManager;
-
-/**
-* Stream direction - defines whether stream is only input stream (read), output (write) or 
-* bi-directional (read/write).
-*/
-enum class StreamDirection {
-	INPUT = 0,
-	OUTPUT,
-	BIDIRECTIONAL
-};
-
 /**
 * Abstrac class with IO interface. Every input/output connector of the application must derive 
 * from this interface.
 */
-class IO
+class IO : public Configurable
 {
 public:
 	typedef std::function<void(std::vector<char>&, ssize_t)> rxCallback_t;
@@ -53,7 +43,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	IO(unsigned int id, const std::string& name, StreamDirection direction) : id_(id), name_(name), direction_(direction), rxCallback_(nullptr), txCallback_(nullptr) {}
+	IO(unsigned int id, const std::string& name, StreamDirection direction) : rxCallback_(nullptr), txCallback_(nullptr) {}
 	
 	/**
 	* Default destructor.
@@ -62,11 +52,12 @@ public:
 
 	/**
 	* Method allowing module to configure itself using external configuration source.
+	* Basic configuration for every module is done here.
 	* @param[in] config reference to the configuration manager facility
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
 	*/
-	virtual bool configure(ConfigurationManager& config, const std::string& section) = 0;
+	virtual bool configure(ConfigurationManager& config, const std::string& section) override;
 
 	/**
 	* Opens stream. Each stream needs to be opened before usage but after configuration.
@@ -143,36 +134,14 @@ public:
 	* @param[in] rhs IO object to be compared
 	* @return True if streams have the same ID, otherwise false.
 	*/
-	virtual bool operator==(const IO &rhs)
+	virtual bool operator==(const IO& rhs)
 	{
-		return (rhs.id_ == id_);
+		return (currentConfiguration_.getID() == rhs.currentConfiguration_.getID());
 	}
 
-	/**
-	* Get IO object ID.
-	* @return ID of the object.
-	*/
-	unsigned int getID() const
+	virtual const IOconfiguration& getConfiguration() const
 	{
-		return id_;
-	}
-
-	/**
-	* Get name of the IO object.
-	* @return Name of the IO object.
-	*/
-	std::string getName() const
-	{
-		return name_;
-	}
-
-	/**
-	* Get stream direction.
-	* @return Stream direction.
-	*/
-	StreamDirection getDirection() const
-	{
-		return direction_;
+		return currentConfiguration_;
 	}
 
 private:
@@ -186,13 +155,10 @@ private:
 	*/
 	virtual void async_write_worker(const std::vector<char>& buffer, size_t writeMax = 0, txCallback_t txCallback = nullptr);
 
+	IOconfiguration currentConfiguration_;		/*!< Current configuration */
 
-	unsigned int id_{0};		/*!< IO identification number */
-	std::string name_{""};		/*!< Name of the IO object - used for user friendly printing */
-	StreamDirection direction_{StreamDirection::BIDIRECTIONAL}; /*!< Direction of the stream */
-
-	rxCallback_t rxCallback_;		/*!< RX callback function */
-	txCallback_t txCallback_;		/*!< TX callback function */
+	rxCallback_t rxCallback_;					/*!< RX callback function */
+	txCallback_t txCallback_;					/*!< TX callback function */
 };
 
 #endif /* SRC_IO_HPP_ */

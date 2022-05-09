@@ -19,11 +19,7 @@
 
 constexpr std::string_view SETT_TYPE = "type";
 constexpr std::string_view SETT_FILE = "file";
-constexpr std::string_view SETT_DIRECTION = "direction";
-constexpr std::string_view SETT_BINARY = "binary";
-constexpr std::string_view SETT_APPEND = "append";
-constexpr std::string_view SETT_R_CHUNK = "read_chunk";
-constexpr std::string_view SETT_W_CHUNK = "write_chunk";
+
 
 FileIO::~FileIO() 
 {
@@ -52,7 +48,7 @@ int FileIO::open()
 	if (!fileStream_.is_open())
 	{
 		std::fstream::openmode mode = static_cast<std::fstream::openmode>(0);
-		switch (getDirection())
+		switch (getConfiguration().getDirection())
 		{
 			case StreamDirection::BIDIRECTIONAL:
 				mode = std::fstream::in | std::fstream::out; break;
@@ -89,7 +85,7 @@ ssize_t FileIO::read(std::vector<char>& buffer, size_t readMax)
 
 	std::lock_guard<std::mutex> guard(readLock_);
 
-	if (getDirection() == StreamDirection::OUTPUT)
+	if (getConfiguration().getDirection() == StreamDirection::OUTPUT)
 		return -EINVAL;
 
 	if (!fileStream_.is_open() || !fileStream_.good())
@@ -119,7 +115,7 @@ ssize_t FileIO::write(const std::vector<char>& buffer, size_t writeMax)
 
 	std::lock_guard<std::mutex> guard(writeLock_);
 
-	if (getDirection() == StreamDirection::INPUT)
+	if (getConfiguration().getDirection() == StreamDirection::INPUT)
 		return -EINVAL;
 
 	if (!fileStream_.is_open() || !fileStream_.good())
