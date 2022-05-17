@@ -43,6 +43,68 @@ TEST(ConfigurationManager, EmptyConfig)
 	EXPECT_EQ("testStr", sTestVal);
 }
 
+// Check ConfigurationManager with empty configuration.
+TEST(ConfigurationManager, ConfigFromMemory)
+{
+	constexpr const char* conf = R"conf(
+[test1]
+key1 = 123
+key2 = 312
+
+;valid comment
+[test2]
+key4 = abcd
+key5 = abde asdf zxcv
+
+[test3]
+#this is the comment
+key1 = true
+key2 = false
+key1000 = 2.1
+)conf";
+
+	std::string config(conf);
+	auto& configurationManager = ConfigurationManager::instance();
+
+	configurationManager.parseFromMemory(config);
+
+	bool bTestVal = false;
+	int iTestVal = 92;
+	long lTestVal = 991;
+	double dTestVal = 4.22;
+	std::string sTestVal("testStr");
+
+	EXPECT_EQ(false, configurationManager.settingExists("test1", "key0"));
+	EXPECT_EQ(true, configurationManager.settingExists("test1", "key1"));
+	EXPECT_EQ(true, configurationManager.settingExists("test1", "key2"));
+	EXPECT_EQ(true, configurationManager.settingExists("test2", "key4"));
+	EXPECT_EQ(true, configurationManager.settingExists("test2", "key5"));
+	EXPECT_EQ(true, configurationManager.settingExists("test3", "key1"));
+	EXPECT_EQ(true, configurationManager.settingExists("test3", "key2"));
+	EXPECT_EQ(true, configurationManager.settingExists("test3", "key1000"));
+
+	EXPECT_EQ(true, configurationManager.get<int>("test1", "key1", iTestVal));
+	EXPECT_EQ(123, iTestVal);
+
+	EXPECT_EQ(true, configurationManager.get<int>("test1", "key2", iTestVal));
+	EXPECT_EQ(312, iTestVal);
+
+	EXPECT_EQ(true, configurationManager.get<std::string>("test2", "key4", sTestVal));
+	EXPECT_EQ("abcd", sTestVal);
+
+	EXPECT_EQ(true, configurationManager.get<std::string>("test2", "key5", sTestVal));
+	EXPECT_EQ("abde asdf zxcv", sTestVal);
+
+	EXPECT_EQ(true, configurationManager.get<bool>("test3", "key1", bTestVal));
+	EXPECT_EQ(true, bTestVal);
+
+	EXPECT_EQ(true, configurationManager.get<bool>("test3", "key2", bTestVal));
+	EXPECT_EQ(false, bTestVal);
+
+	EXPECT_EQ(true, configurationManager.get<double>("test3", "key1000", dTestVal));
+	EXPECT_EQ(2.1, dTestVal);
+
+}
 
 long long convertToLongLong(const std::string& value);
 double convertToDouble(const std::string& value);
