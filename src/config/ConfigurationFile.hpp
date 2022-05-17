@@ -11,6 +11,7 @@
 #define SRC_CONFIGURATIONFILE_HPP_
 
 #include <string>
+#include <sstream>
 #include <unordered_map>
 
  /**
@@ -37,8 +38,13 @@ public:
 	* @param[out] settings reference to map where configuration will be stored
 	*/
 	virtual void parse(std::string path, ConfigurationStructure& settings) = 0;
+
+	/**
+	* Parse specified memory location and store key=value results in provided map.
+	* @param[in] config string stream with configuration
+	* @param[out] settings reference to map where configuration will be stored
+	*/
+	virtual void parse(std::stringstream& config, ConfigurationStructure& settings) = 0;
 };
-
-
 
 #endif /* SRC_CONFIGURATIONFILE_HPP_ */

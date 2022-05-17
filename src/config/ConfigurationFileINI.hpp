@@ -37,8 +37,13 @@ public:
 	* @param[out] settings reference to map where configuration will be stored
 	*/
 	void parse(std::string path, ConfigurationStructure& settings) override;
+
+	/**
+	* Parse specified memory location and store key=value results in provided map.
+	* @param[in] config string stream with configuration
+	* @param[out] settings reference to map where configuration will be stored
+	*/
+	void parse(std::stringstream& config, ConfigurationStructure& settings) override;
 };
-
-
 
 #endif /* SRC_CONFIGURATIONFILE_HPP_ */
