@@ -1,5 +1,5 @@
 /**
- *  @file    IO.hpp
+ *  @file   IO.hpp
  *  @brief  Input/output data model .
  *
  *  @author Piotr "asmie" Olszewski
@@ -7,6 +7,10 @@
  *  @date   2019.04.12
  *
  *  This file contains the base class for any I/O that can be connected to the swpl application.
+ * 
+ *  The configuration for IO is done using composite pattern to separate the responsibility for managing
+ *  configuration to other class. The one and only task for IO and its derivates is to handle input and
+ *  output operations on particalar element.
  */
 
 #ifndef SRC_IO_HPP_

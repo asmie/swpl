@@ -22,6 +22,7 @@ bool IOconfiguration::configure(ConfigurationManager& config, const std::string&
 	bool configurationCorrect = false;
 
 	config.get(section, "name", name_);
+	
 
 	return configurationCorrect;
 }

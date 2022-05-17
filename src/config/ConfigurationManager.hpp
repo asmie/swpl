@@ -49,6 +49,14 @@ public:
 	*/
 	void parseConfiguration(int argc, char** argv) noexcept;
 
+
+	/**
+	* Parse configuration passed as string.
+	* @param[in] argc argument count
+	* @param[in] argv pointer to c-like strings containing arguments
+	*/
+	void parseFromMemory(std::string_view configuration) noexcept;
+
 	/**
 	* Get the value from specified key and section - generic version.
 	* @param[in] section section to get key from
