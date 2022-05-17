@@ -13,6 +13,8 @@
 
 #include <fstream>
 #include <regex>
+#include <string>
+#include <sstream>
 
 #include <cfloat>
 #include <climits>
@@ -52,6 +54,15 @@ void ConfigurationManager::parseConfiguration(int argc, char** argv) noexcept
 		configurationFile_ = std::make_unique<ConfigurationFileINI>();
 		configurationFile_->parse(fileToRead, configuration_);
 	}
+}
+
+void ConfigurationManager::parseFromMemory(std::string& configuration) noexcept
+{
+	std::stringstream ss;
+	ss.str(configuration);
+
+	configurationFile_ = std::make_unique<ConfigurationFileINI>();
+	configurationFile_->parse(ss, configuration_);
 }
 
 

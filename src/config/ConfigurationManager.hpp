@@ -55,7 +55,7 @@ public:
 	* @param[in] argc argument count
 	* @param[in] argv pointer to c-like strings containing arguments
 	*/
-	void parseFromMemory(std::string_view configuration) noexcept;
+	void parseFromMemory(std::string& configuration) noexcept;
 
 	/**
 	* Get the value from specified key and section - generic version.
