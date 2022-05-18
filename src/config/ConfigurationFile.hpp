@@ -1,6 +1,6 @@
 /**
  *  @file   ConfigurationFile.hpp
- *  @brief  Responsible for managing application configuration.
+ *  @brief  Interface for configuration files.
  *
  *  @author Piotr "asmie" Olszewski
  *

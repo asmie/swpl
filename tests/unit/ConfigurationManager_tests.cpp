@@ -15,6 +15,43 @@
 
 #include <string>
 
+constexpr const char* conf = R"conf(
+[test1]
+key1 = 123
+key2 = 312
+
+;valid comment
+[test2]
+key4 = abcd
+key5 = abde asdf zxcv
+
+[test3]
+#this is the comment
+key1 = true
+key2 = false
+key1000 = 2.1
+)conf";
+
+constexpr const char* invalid_conf = R"conf(
+[test1]
+key1 
+
+[test2
+key4 = abcd
+key5 = abde asdf zxcv
+
+key2 = false
+key1000 = 2.1
+)conf";
+
+constexpr const char* doubled_keyes_conf = R"conf(
+[test1]
+key1 = abcd
+key1 = abde asdf zxcv
+
+)conf";
+
+
 // Check ConfigurationManager with empty configuration.
 TEST(ConfigurationManager, EmptyConfig)
 {
@@ -46,23 +83,6 @@ TEST(ConfigurationManager, EmptyConfig)
 // Check ConfigurationManager with empty configuration.
 TEST(ConfigurationManager, ConfigFromMemory)
 {
-	constexpr const char* conf = R"conf(
-[test1]
-key1 = 123
-key2 = 312
-
-;valid comment
-[test2]
-key4 = abcd
-key5 = abde asdf zxcv
-
-[test3]
-#this is the comment
-key1 = true
-key2 = false
-key1000 = 2.1
-)conf";
-
 	std::string config(conf);
 	auto& configurationManager = ConfigurationManager::instance();
 
@@ -103,6 +123,36 @@ key1000 = 2.1
 
 	EXPECT_EQ(true, configurationManager.get<double>("test3", "key1000", dTestVal));
 	EXPECT_EQ(2.1, dTestVal);
+}
+
+// Check corrupted configuration (no segfault or smth ;))
+TEST(ConfigurationManager, InvalidConfig)
+{
+	std::string config(invalid_conf);
+	auto& configurationManager = ConfigurationManager::instance();
+
+	configurationManager.parseFromMemory(config);
+
+	EXPECT_EQ(false, configurationManager.settingExists("test1", "key0"));
+	EXPECT_EQ(true, configurationManager.settingExists("test1", "key1"));
+
+}
+
+// Check ConfigurationManager with double keys in one section
+TEST(ConfigurationManager, DoubledKeys)
+{
+	std::string config(doubled_keyes_conf);
+	auto& configurationManager = ConfigurationManager::instance();
+
+	configurationManager.parseFromMemory(config);
+
+	std::string sTestVal("testStr");
+
+	EXPECT_EQ(false, configurationManager.settingExists("test1", "key0"));
+	EXPECT_EQ(true, configurationManager.settingExists("test1", "key1"));
+
+	EXPECT_EQ(true, configurationManager.get<std::string>("test1", "key1", sTestVal));
+	EXPECT_EQ("abde asdf zxcv", sTestVal);
 
 }
 
