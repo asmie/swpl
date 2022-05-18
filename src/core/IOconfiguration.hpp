@@ -70,9 +70,9 @@ public:
 	* direction = input/output/bidirectional		# def: bidirectional
 	* binary = true/false							# def: false
 	* read_chunk_min = 0							# read chunks - only for bi/input
-	* read_chunk_max = 128							# read chunks - only for bi/input
+	* read_chunk_max = 0							# read chunks - only for bi/input
 	* write_chunk_min = 0							# write chunks - onlu for bi/output
-	* write_chunk_max = 128							# write chunks - onlu for bi/output
+	* write_chunk_max = 0							# write chunks - onlu for bi/output
 	* @param[in] config reference to the configuration manager facility
 	* @param[in] section place where module configuration is stored
 	* @return True if configuration is valid, otherwise false.
@@ -105,6 +105,15 @@ public:
 	std::string getName() const
 	{
 		return name_;
+	}
+
+	/**
+	* Get type of the IO object.
+	* @return Type of the IO object.
+	*/
+	std::string getType() const
+	{
+		return type_;
 	}
 
 	/**
@@ -153,10 +162,23 @@ public:
 		return writeChunkMin_;
 	}
 
+	/**
+	* Get information if stream is binary or text based.
+	* @return True if binary, otherwise false.
+	*/
+	bool getBinary() const
+	{
+		return binary_;
+	}
+
 private:
+	static unsigned int last_id_;
+
 	unsigned int id_{ 0 };											/*!< IO identification number */
+	std::string type_{ "" };										/*!< Type */
 	std::string name_{ "" };										/*!< Name of the IO object - used for user friendly printing */
 	StreamDirection direction_{ StreamDirection::BIDIRECTIONAL };	/*!< Direction of the stream */
+	bool binary_{ true };											/*!< Indicates if stream is binary */
 
 	size_t readChunkMax_{ 0 };			/*!< Maximum chunk to read (unless specified explicit in function call) */
 	size_t readChunkMin_{ 0 };			/*!< Minimum chunk to read (can block reading) */

@@ -14,6 +14,21 @@
 
 class ConfigurationManager;
 
+enum class SettingType
+{
+	UNKNOWN,
+	STRING,
+	INTEGER,
+	DOUBLE,
+	BOOL
+};
+
+typedef struct 
+{
+	std::string setting_name;
+	SettingType setting_type;
+} Setting;
+
 /**
 * Interface for all classes that can be configured using the standard application configuration file.
 * It depends on the fact that each class should know its configuration section and is able to parse
