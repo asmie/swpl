@@ -36,6 +36,11 @@ Supported transformations:
 - match (pass only data that are matching the pattern);
 - patch (change data based on the pattern);
 
+## Current state
+Project is still under development.
+Current work is done towards:
+- socket handling
+- stages with transformations
 
 ## Usage
 ### Command line interface
