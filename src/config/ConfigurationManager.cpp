@@ -38,21 +38,46 @@ double convertToDouble(const std::string& value);
 
 void ConfigurationManager::parseConfiguration(int argc, char** argv) noexcept
 {
-	bool readFromFile = false;
-	const char* fileToRead = nullptr;
-
 	if (argv == nullptr)
-		return;																	
+		return;
 
-	for (auto i = 0; i < argc; i++)
+	appConfig_.config = nullptr;
+	appConfig_.daemonize = true;
+	appConfig_.help = false;
+	appConfig_.valid = false;
+	appConfig_.verbose = false;
+
+	for (auto i = 1; i < argc; i++)
 	{
-		
+		if (argv[i][0] == '-')
+		{
+			switch (argv[i][1])
+			{
+				case 'c':
+					appConfig_.config = argv[i+1];
+					appConfig_.valid = true;
+					i++;
+					break;
+				case 'v':
+					appConfig_.verbose = true;
+					break;
+				case 'h':
+					appConfig_.help = true;
+					appConfig_.valid = true;
+					break;
+				case 'd':
+					appConfig_.daemonize = false;
+					break;
+				default:
+					appConfig_.valid = false;
+			}
+		}
 	}
 
-	if (readFromFile)
+	if (appConfig_.valid == true && appConfig_.config != nullptr)
 	{
 		configurationFile_ = std::make_unique<ConfigurationFileINI>();
-		configurationFile_->parse(fileToRead, configuration_);
+		configurationFile_->parse(appConfig_.config, configuration_);
 	}
 }
 

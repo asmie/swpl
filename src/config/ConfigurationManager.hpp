@@ -16,6 +16,14 @@
 #include <memory>
 #include <unordered_map>
 
+typedef struct {
+	bool verbose;
+	bool daemonize;
+	bool help;
+	bool valid;
+	const char* config;
+} AppConfig;
+
 /**
 * Configuration manager class that is responsible for handling application settings. Parses
 * command line arguments and if needed manages parsing file with configuration.
@@ -74,13 +82,19 @@ public:
 	*/
 	bool settingExists(const std::string& section, const std::string& key) noexcept;
 
+	/**
+	* Get application configuration.
+	*/
+	AppConfig getAppConfig() const
+	{
+		return appConfig_;
+	}
+
 private:
 	ConfigurationManager() { }
-
 	std::unique_ptr<ConfigurationFile> configurationFile_;
-
 	ConfigurationStructure configuration_;
-
+	AppConfig appConfig_ {false, true, true, false, nullptr};
 };
 
 

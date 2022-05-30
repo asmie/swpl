@@ -7,7 +7,7 @@ SWitchboard PipeLines (swpl) is application dedicated to create pipelanes with s
 
 ## General Description
 
-swpl is a tool that allow to connect different input/output components (lets call them IOs) and read/write to it some data. User is able to put between those IOs other components that are able to make certain operations on the data (transformations). The whole pipe between the IOs along with all transformations is called pipeline. It looks like:
+swpl is a tool that allow to connect different input/output components (lets call them IOs like files, pipes, sockets, devices) and read/write to it some data. User is able to put between those IOs other components that are able to make certain operations on the data (transformations like matching, filtering, copying). The whole pipe between the IOs along with all transformations is called pipeline. It looks like:
 
 IO_1 <--> Transform_1 <--> Transform_2 <--> Transform_n ... <--> IO_2
 
@@ -158,7 +158,7 @@ which should produce binary itself.
 Bugs can be reported using [GitHub issue tracker](https://github.com/asmie/swpl/issues).
 
 ## Further development
-stamp-suite handles only one session at the time so it can be used to associate exactly one sender with exactly one reflector. This can be improved in the future as one reflector can handle many senders. Of course, it's simple when we're talking about the stateless mode as the only thing that reflector needs to do is copy original fields and generate own timestamp (in unauthorized mode). The things is going worse when we're talking about the stateful mode and multiple sessions, when some of them can be started and some of them can be terminated. As STAMP does not handles session management itself it needs to be done outside (somehow). Using 4-tuple params is of course problematic as configuring session-reflector for each 4-tuple can drive everybody crazy, using optional session identifiers described in the RFC 8972 seems to be the best way to handle state. 
+Project is currently under development and therefore there will be more IOs and more transform elements.
 
 ## Contributing
 
