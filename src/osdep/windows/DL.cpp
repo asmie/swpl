@@ -24,7 +24,7 @@ void* DL::getFuncAddr(void* libraryHandle, const char* functionName)
 {
 	void* addr = nullptr;
 
-	addr = GetProcAddress(libraryHandle, functionName);
+	addr = GetProcAddress((HMODULE)libraryHandle, functionName);
 
 	return (addr);
 }
