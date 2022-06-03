@@ -19,7 +19,7 @@
 
 bool IO::configure(ConfigurationManager& config, const std::string& section)
 {
-	return currentConfiguration_.configure(config, section);
+	return configuration_.configure(config, section);
 }
 
 bool IO::async_read(std::vector<char>& buffer, size_t readMax, rxCallback_t rxCallback)

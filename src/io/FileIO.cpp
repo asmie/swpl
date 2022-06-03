@@ -17,8 +17,6 @@
 #include <mutex>
 #include <string_view>
 
-constexpr std::string_view SETT_TYPE = "type";
-constexpr std::string_view SETT_FILE = "file";
 
 
 FileIO::~FileIO() 
@@ -28,17 +26,7 @@ FileIO::~FileIO()
 
 bool FileIO::configure(ConfigurationManager& config, const std::string& section)
 {
-	bool configurationCorrect = false;
-	std::string val;
-
-	bool res = config.get(section, "type", val);
-
-	if (val != "file")
-	{
-		configurationCorrect = false;
-	}
-
-	return configurationCorrect;
+	return IOconfig<FileIOconfiguration>::configuration_.configure(config, section);
 }
 
 int FileIO::open() 
@@ -60,7 +48,7 @@ int FileIO::open()
 
 		try 
 		{
-			fileStream_.open(fileName_, mode);
+			fileStream_.open(IOconfig<FileIOconfiguration>::configuration_.getFile(), mode);
 			if (!fileStream_.good())
 				result = -1;
 		}

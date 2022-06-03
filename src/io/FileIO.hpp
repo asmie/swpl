@@ -13,6 +13,7 @@
 #define SRC_FILEIO_HPP_
 
 #include "core/IO.hpp"
+#include "FileIOconfiguration.hpp"
 
 #include <fstream>
 #include <mutex>
@@ -20,7 +21,7 @@
 /**
 * Class for reading files using IO interface.
 */
-class FileIO : public IO
+class FileIO : public IO, IOconfig<FileIOconfiguration>
 {
 public:
 	/**
@@ -35,7 +36,7 @@ public:
 	* @param[in] name name of the stream
 	* @param[in] direction stream direction (in/out/in-out)
 	*/
-	FileIO(const std::string& fileName, unsigned int id, const std::string& name, StreamDirection direction) : IO(id, name, direction), fileName_(fileName) { }
+	FileIO(unsigned int id, const std::string& name, StreamDirection direction) : IO(id, name, direction) { }
 	
 	/**
 	* Default destructor.
@@ -92,11 +93,10 @@ public:
 	virtual ssize_t write(const std::vector<char>& buffer, size_t writeMax = 0) override;
 
 private:
-	std::string fileName_;				/*!< Filename (with or without path) */
-	std::fstream fileStream_;			/*!< Internal file stream representation */
+	std::fstream fileStream_;					/*!< Internal file stream representation */
 
-	std::mutex readLock_;				/*!< Mutex preventing concurrent locking during reading */
-	std::mutex writeLock_;				/*!< Mutex preventing concurrent locking during writing */
+	std::mutex readLock_;						/*!< Mutex preventing concurrent locking during reading */
+	std::mutex writeLock_;						/*!< Mutex preventing concurrent locking during writing */
 };
 
 #endif /* SRC_FILEIO_HPP_ */

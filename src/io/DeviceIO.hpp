@@ -13,6 +13,7 @@
 #define SRC_DEVICEIO_HPP_
 
 #include "core/IO.hpp"
+#include "FileIOconfiguration.hpp"
 
 #include <cstdlib>
 #include <mutex>
@@ -20,7 +21,7 @@
  /**
  * Class for reading files using IO interface.
  */
-class DeviceIO : public IO
+class DeviceIO : public IO, IOconfig<FileIOconfiguration>
 {
 public:
 	/**

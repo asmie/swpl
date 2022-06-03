@@ -22,15 +22,21 @@
 
 #include <cstdlib>
 #include <string>
-#include <string_view>
 #include <functional>
 #include <vector>
+
+template <class T>
+class IOconfig
+{
+protected:
+	T configuration_;
+};
 
 /**
 * Abstrac class with IO interface. Every input/output connector of the application must derive 
 * from this interface.
 */
-class IO : public Configurable
+class IO : public Configurable, IOconfig<IOconfiguration>
 {
 public:
 	typedef std::function<void(std::vector<char>&, ssize_t)> rxCallback_t;
@@ -140,12 +146,12 @@ public:
 	*/
 	virtual bool operator==(const IO& rhs)
 	{
-		return (currentConfiguration_.getID() == rhs.currentConfiguration_.getID());
+		return (configuration_.getID() == rhs.configuration_.getID());
 	}
 
 	virtual const IOconfiguration& getConfiguration() const
 	{
-		return currentConfiguration_;
+		return configuration_;
 	}
 
 private:
@@ -158,8 +164,6 @@ private:
 	* Helper method to async writing.
 	*/
 	virtual void async_write_worker(const std::vector<char>& buffer, size_t writeMax = 0, txCallback_t txCallback = nullptr);
-
-	IOconfiguration currentConfiguration_;		/*!< Current configuration */
 
 	rxCallback_t rxCallback_;					/*!< RX callback function */
 	txCallback_t txCallback_;					/*!< TX callback function */
