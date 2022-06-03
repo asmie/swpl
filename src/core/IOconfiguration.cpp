@@ -62,8 +62,7 @@ bool IOconfiguration::configure(ConfigurationManager& config, const std::string&
 	config.get(section, SETTINGS.at(SettingLabel::WRITE_CHUNK_MIN).setting_name, writeChunkMin_);
 	config.get(section, SETTINGS.at(SettingLabel::WRITE_CHUNK_MAX).setting_name, writeChunkMax_);
 	
-	if (!config.settingExists(section, SETTINGS.at(SettingLabel::NAME).setting_name) ||
-		!config.settingExists(section, SETTINGS.at(SettingLabel::TYPE).setting_name))
+	if (!config.settingExists(section, SETTINGS.at(SettingLabel::TYPE).setting_name))
 		configurationCorrect = false;
 
 	if (configurationCorrect)

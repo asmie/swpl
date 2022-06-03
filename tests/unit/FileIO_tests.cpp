@@ -20,6 +20,7 @@ constexpr const char* conf_test_valid = R"conf(
 [io1]
 type = file
 file = file1
+name = file test
 
 direction = bidirectional
 binary = true
@@ -33,10 +34,12 @@ write_chunk_max = 223
 constexpr const char* conf = R"conf(
 [io1]
 type = file
-file = file1
+file = test_file
 
 direction = bidirectional
 )conf";
+
+void prepare_file();
 
 TEST(FileIO, configure)
 {
@@ -78,33 +81,74 @@ TEST(FileIO, configure)
 
 	FileIO fio;
 
-	fio.configure(configurationManager, "io1");
+	bool result = fio.configure(configurationManager, "io1");
+
+	EXPECT_EQ(true, result);
+
 }
 
 
-TEST(FileIO, open)
+TEST(FileIO, open_close)
 {
+	auto& configurationManager = ConfigurationManager::instance();
+	std::string config(conf_test_valid);
+	configurationManager.parseFromMemory(config);
+	FileIO fio;
+	bool result = fio.configure(configurationManager, "io1");
 
+	EXPECT_EQ(true, result);
+	prepare_file();
 
+	auto res = fio.open();
+	EXPECT_GE(0, res);
+
+	result = fio.close();
+	EXPECT_GE(0, res);
 }
-
-
-TEST(FileIO, close)
-{
-
-
-}
-
 
 TEST(FileIO, read)
 {
+	auto& configurationManager = ConfigurationManager::instance();
+	std::string config(conf_test_valid);
+	configurationManager.parseFromMemory(config);
+	FileIO fio;
+	bool result = fio.configure(configurationManager, "io1");
 
+	EXPECT_EQ(true, result);
+	prepare_file();
 
+	auto res = fio.open();
+	EXPECT_GE(0, res);
+
+	result = fio.close();
+	EXPECT_GE(0, res);
 }
 
 
 TEST(FileIO, write)
 {
+	auto& configurationManager = ConfigurationManager::instance();
+	std::string config(conf_test_valid);
+	configurationManager.parseFromMemory(config);
+	FileIO fio;
+	bool result = fio.configure(configurationManager, "io1");
+
+	EXPECT_EQ(true, result);
+	prepare_file();
+
+	auto res = fio.open();
+	EXPECT_GE(0, res);
+
+	result = fio.close();
+	EXPECT_GE(0, res);
+}
 
 
+#include <fstream>
+#include <iostream>
+void prepare_file()
+{
+	std::fstream f("test_file");
+
+	f << "This is the test file" << std::endl;
 }
