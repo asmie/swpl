@@ -35,6 +35,8 @@ Supported transformations:
 - mirror (mirroring data to another destination: any possible IO type);
 - match (pass only data that are matching the pattern);
 - patch (change data based on the pattern);
+- call (call external application with the data);
+- api (call external library using specified API).
 
 ## Current state
 Project is still under development.
