@@ -32,7 +32,6 @@ bool FileIO::configure(ConfigurationManager& config, const std::string& section)
 int FileIO::open() 
 {
 	int result = 0;
-
 	if (!fileStream_.is_open())
 	{
 		std::fstream::openmode mode = static_cast<std::fstream::openmode>(0);
@@ -49,15 +48,14 @@ int FileIO::open()
 		try 
 		{
 			fileStream_.open(IOconfig<FileIOconfiguration>::configuration_.getFile(), mode);
-			if (!fileStream_.good())
-				result = -1;
+			if (!fileStream_.is_open() || !fileStream_.good())
+				result = -EBADF;
 		}
 		catch (std::fstream::failure& e)
 		{
 			result = -ENFILE;
 		}
 	}
-
 	return result;
 }
 
@@ -67,18 +65,16 @@ int FileIO::close()
 	return 0;
 }
 
+
 ssize_t FileIO::read(std::vector<char>& buffer, size_t readMax) 
 {
 	ssize_t retVal = 0;
 
 	std::lock_guard<std::mutex> guard(readLock_);
-
 	if (getConfiguration().getDirection() == StreamDirection::OUTPUT)
 		return -EINVAL;
-
 	if (!fileStream_.is_open() || !fileStream_.good())
 		return -ENFILE;
-	
 	size_t toRead = buffer.capacity();
 
 	if (readMax != 0 && readMax < toRead)

@@ -16,6 +16,9 @@
 #include <string>
 #include <sstream>
 
+#define TEST_FILE "test_file"
+#define TEST_STR "This is the test file"
+
 constexpr const char* conf_test_valid = R"conf(
 [io1]
 type = file
@@ -40,6 +43,7 @@ direction = bidirectional
 )conf";
 
 void prepare_file();
+void remove_file();
 
 TEST(FileIO, configure)
 {
@@ -83,7 +87,7 @@ TEST(FileIO, configure)
 
 	bool result = fio.configure(configurationManager, "io1");
 
-	EXPECT_EQ(true, result);
+	EXPECT_EQ(result, true);
 
 }
 
@@ -91,7 +95,7 @@ TEST(FileIO, configure)
 TEST(FileIO, open_close)
 {
 	auto& configurationManager = ConfigurationManager::instance();
-	std::string config(conf_test_valid);
+	std::string config(conf);
 	configurationManager.parseFromMemory(config);
 	FileIO fio;
 	bool result = fio.configure(configurationManager, "io1");
@@ -100,16 +104,16 @@ TEST(FileIO, open_close)
 	prepare_file();
 
 	auto res = fio.open();
-	EXPECT_GE(0, res);
+	EXPECT_GE(res, 0);
 
-	result = fio.close();
-	EXPECT_GE(0, res);
+	res = fio.close();
+	EXPECT_GE(res, 0);
 }
 
-TEST(FileIO, read)
+TEST(FileIO, read_write)
 {
 	auto& configurationManager = ConfigurationManager::instance();
-	std::string config(conf_test_valid);
+	std::string config(conf);
 	configurationManager.parseFromMemory(config);
 	FileIO fio;
 	bool result = fio.configure(configurationManager, "io1");
@@ -118,37 +122,42 @@ TEST(FileIO, read)
 	prepare_file();
 
 	auto res = fio.open();
-	EXPECT_GE(0, res);
+	std::cout << res << std::endl;
+	EXPECT_GE(res, 0);
+
+	std::vector<char> buffer;
+	buffer.reserve(25);
+	auto res2 = fio.read(buffer, 25);
+
+	EXPECT_EQ(res2, 22);
+
+	std::string fRead(buffer.begin(), buffer.end());
+	std::string patt(TEST_STR);
+	std::string str;
+
+	EXPECT_PRED3([](auto str, auto fRead, auto patt) {
+		return str == fRead || str == patt; }, str, fRead, patt);
 
 	result = fio.close();
-	EXPECT_GE(0, res);
-}
+	EXPECT_GE(res, 0);
 
-
-TEST(FileIO, write)
-{
-	auto& configurationManager = ConfigurationManager::instance();
-	std::string config(conf_test_valid);
-	configurationManager.parseFromMemory(config);
-	FileIO fio;
-	bool result = fio.configure(configurationManager, "io1");
-
-	EXPECT_EQ(true, result);
-	prepare_file();
-
-	auto res = fio.open();
-	EXPECT_GE(0, res);
-
-	result = fio.close();
-	EXPECT_GE(0, res);
+	remove_file();
 }
 
 
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 void prepare_file()
 {
-	std::fstream f("test_file");
+	std::fstream f(TEST_FILE, std::fstream::out);
 
-	f << "This is the test file" << std::endl;
+	f << TEST_STR << std::endl;
+
+	f.close();
+}
+
+void remove_file()
+{
+	remove(TEST_FILE);
 }
