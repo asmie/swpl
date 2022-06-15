@@ -88,6 +88,9 @@ int DeviceIO::open()
 
 int DeviceIO::close()
 {
+	std::lock_guard<std::mutex> r_guard(readLock_);
+	std::lock_guard<std::mutex> w_guard(writeLock_);
+
 #if defined(SWPL_SYSTEM_HAVE_IO_H)
 	if (_close(devFd_) == -1)
 		return -errno;
@@ -104,10 +107,10 @@ ssize_t DeviceIO::read(std::vector<char>& buffer, size_t readMax)
 {
 	ssize_t retVal = 0;
 
-	std::lock_guard<std::mutex> guard(readLock_);
-
 	if (getConfiguration().getDirection() == StreamDirection::OUTPUT)
 		return -EINVAL;
+
+	std::lock_guard<std::mutex> guard(readLock_);
 
 	if (devFd_ < 0)
 		return -ENFILE;
@@ -135,10 +138,10 @@ ssize_t DeviceIO::write(const std::vector<char>& buffer, size_t writeMax)
 {
 	ssize_t retVal = 0;
 
-	std::lock_guard<std::mutex> guard(writeLock_);
-
 	if (getConfiguration().getDirection() == StreamDirection::INPUT)
 		return -EINVAL;
+
+	std::lock_guard<std::mutex> guard(writeLock_);
 
 	if (devFd_ < 0)
 		return -ENFILE;
