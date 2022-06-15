@@ -61,6 +61,9 @@ int FileIO::open()
 
 int FileIO::close() 
 {
+	// Gain locks as we can't close file during operations on it.
+	std::lock_guard<std::mutex> r_guard(readLock_);
+	std::lock_guard<std::mutex> w_guard(writeLock_);
 	fileStream_.close();
 	return 0;
 }
@@ -70,9 +73,11 @@ ssize_t FileIO::read(std::vector<char>& buffer, size_t readMax)
 {
 	ssize_t retVal = 0;
 
-	std::lock_guard<std::mutex> guard(readLock_);
 	if (getConfiguration().getDirection() == StreamDirection::OUTPUT)
 		return -EINVAL;
+
+	std::lock_guard<std::mutex> guard(readLock_);
+
 	if (!fileStream_.is_open() || !fileStream_.good())
 		return -ENFILE;
 	size_t toRead = buffer.capacity();
@@ -97,10 +102,10 @@ ssize_t FileIO::write(const std::vector<char>& buffer, size_t writeMax)
 {
 	ssize_t retVal = 0;
 
-	std::lock_guard<std::mutex> guard(writeLock_);
-
 	if (getConfiguration().getDirection() == StreamDirection::INPUT)
 		return -EINVAL;
+
+	std::lock_guard<std::mutex> guard(writeLock_);
 
 	if (!fileStream_.is_open() || !fileStream_.good())
 		return -ENFILE;

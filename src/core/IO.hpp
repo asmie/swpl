@@ -24,6 +24,8 @@
 #include <string>
 #include <functional>
 #include <vector>
+#include <future>
+
 
 template <class T>
 class IOconfig
