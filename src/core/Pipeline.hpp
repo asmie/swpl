@@ -4,7 +4,7 @@
  *
  *  @author Piotr "asmie" Olszewski
  *
- *  @date   2019.04.12
+ *  @date   2022.06.15
  */
 
 #ifndef SRC_PIPELINE_HPP_
@@ -22,13 +22,29 @@ public:
 	Pipeline();
 	~Pipeline();
 
-	int start();
-	int stop();
-	int pause();
-	int resume();
+	bool add_stage(Stage& stage);
+	bool remove_stage(Stage& stage);
+
+
+	bool start();
+
+	/**
+	* Stop running pipeline (closes all the streams).
+	*/
+	bool stop();
+
+	/**
+	* Pause the running pipeline.
+	*/
+	bool pause();
+
+	/**
+	* Resume paused pipeline.
+	*/
+	bool resume();
 
 private:
-	
+	std::deque<Stage> stages_;
 
 };
 

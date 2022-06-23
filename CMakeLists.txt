@@ -71,7 +71,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   add_compile_definitions(OS_BUILD_WINDOWS)
 endif()
 
-file(GLOB SRC_FILES src/config/*.cpp src/core/*.cpp src/io/*.cpp )
+file(GLOB SRC_FILES src/config/*.cpp src/core/*.cpp src/io/*.cpp src/transform/*.cpp )
 
 # Find source files
 file(GLOB SOURCES src/main.cpp ${SRC_FILES} ${OS_FILES} )

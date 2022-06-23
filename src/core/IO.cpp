@@ -16,7 +16,6 @@
 #include <atomic>
 #include <functional>
 
-
 bool IO::configure(ConfigurationManager& config, const std::string& section)
 {
 	return configuration_.configure(config, section);
