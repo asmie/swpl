@@ -13,10 +13,15 @@
 #include "gtest/gtest.h"
 #include "core/ConcurrentQueue.hpp"
 
+#include <chrono>
+#include <thread>
+
 TEST(ConcurrentQueue, create)
 {
 	ConcurrentQueue<int> queue;
 	
+	ASSERT_EQ(queue.size(), 0);
+	ASSERT_EQ(queue.empty(), true);
 }
 
 TEST(ConcurrentQueue, size)
@@ -67,11 +72,51 @@ TEST(ConcurrentQueue, pop)
 
 TEST(ConcurrentQueue, sequential_usage)
 {
+	ConcurrentQueue<int> queue;
+	const int elems = 5000;
+	
+	for (int i = 0; i < elems; ++i)
+		queue.push(i);
 
+	ASSERT_EQ(queue.size(), elems);
+	ASSERT_EQ(queue.empty(), false);
+	
+	for (int i = 0; i < elems; ++i) {
+		ASSERT_EQ(queue.front(), i);
+		queue.pop();
+		ASSERT_EQ(queue.size(), elems -i-1);
+	}
+
+	ASSERT_EQ(queue.size(), 0);
+	ASSERT_EQ(queue.empty(), true);
 }
 
 
 TEST(ConcurrentQueue, concurrent_usage)
 {
+	ConcurrentQueue<int> queue;
+	const int elems = 5000;
+	
+	std::thread prod([&]() {
+		for (int i = 0; i < elems; ++i) {
+			queue.push(i);
+			std::this_thread::sleep_for(std::chrono::microseconds(5));
+		}	
+		});
 
+	std::thread cons([&]() {
+		int count = 0;
+		while (count < elems) {
+			if (!queue.empty()) {
+				queue.pop();
+				count++;
+			}
+			std::this_thread::sleep_for(std::chrono::microseconds(5));
+		}
+		});
+
+	prod.join();
+	cons.join();
+
+	ASSERT_EQ(queue.empty(), true);
 }
