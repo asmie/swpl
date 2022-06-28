@@ -9,6 +9,7 @@
 
 #include <thread>
 #include <atomic>
+#include <mutex>
 
 /**
 * Queue node.
@@ -30,6 +31,8 @@ public:
 * 
 * Currently ConcurrentQueue is intended to solve one consumer with multiple producers problem as this is the most common usecase
 * for the current application.
+* 
+* TODO: remove to_remove_mutex_ to avoid blocking.
 * 
 */
 template<class T, class Allocator = std::allocator<T> >
@@ -63,6 +66,7 @@ public:
 	}
 
 	void push(const T& value) {
+		std::scoped_lock lock(to_remove_mutex_);
 		QueueNode<T>* new_node = new QueueNode<T>(value);
 		auto old_tail = tail_.load(std::memory_order::seq_cst);
 		if (old_tail != nullptr)
@@ -78,6 +82,7 @@ public:
 	}
 	
 	void push(T&& value) {
+		std::scoped_lock lock(to_remove_mutex_);
 		QueueNode<T>* new_node = new QueueNode<T>(std::move(value));
 		auto old_tail = tail_.load(std::memory_order::seq_cst);
 		if (old_tail != nullptr)
@@ -89,6 +94,7 @@ public:
 	}
 
 	void pop() {
+		std::scoped_lock lock(to_remove_mutex_);
 		auto old_head = head_.load(std::memory_order::seq_cst);
 		auto old_tail = tail_.load(std::memory_order::seq_cst);
 		
@@ -123,4 +129,6 @@ private:
 	std::atomic<QueueNode<T>*> head_;
 	std::atomic<QueueNode<T>*> tail_;
 	std::atomic<size_t> size_;
+
+	std::mutex to_remove_mutex_;
 };

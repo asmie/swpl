@@ -95,12 +95,12 @@ TEST(ConcurrentQueue, sequential_usage)
 TEST(ConcurrentQueue, concurrent_usage)
 {
 	ConcurrentQueue<int> queue;
-	const int elems = 5000;
+	const int elems = 10000;
 	
 	std::thread prod([&]() {
 		for (int i = 0; i < elems; ++i) {
 			queue.push(i);
-			std::this_thread::sleep_for(std::chrono::microseconds(5));
+			std::this_thread::sleep_for(std::chrono::microseconds(2));
 		}	
 		});
 
@@ -111,7 +111,7 @@ TEST(ConcurrentQueue, concurrent_usage)
 				queue.pop();
 				count++;
 			}
-			std::this_thread::sleep_for(std::chrono::microseconds(5));
+			std::this_thread::sleep_for(std::chrono::microseconds(2));
 		}
 		});
 
