@@ -37,6 +37,12 @@ jobs:
         # Learn more about CodeQL language support at https://git.io/codeql-language-support
 
     steps:
+    - name: Install GCC
+      uses: egor-tensin/setup-gcc@v1
+      with:
+        version: 10
+        platform: x64
+        
     - name: Checkout repository
       uses: actions/checkout@v3
 
