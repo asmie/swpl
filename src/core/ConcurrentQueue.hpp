@@ -48,9 +48,9 @@ public:
 	* Destructor of the ConcurrentQueue. Deletes all allocated nodes.
 	*/
 	~ConcurrentQueue() { 
-		while (head_ != nullptr) {
-			QueueNode<T>* to_remove = head_;
-			head_ = head_->next;
+		while (head_.load() != nullptr) {
+			QueueNode<T>* to_remove = head_.load();
+			head_.store(to_remove->next);
 			delete to_remove;
 		}
 	}
@@ -76,7 +76,7 @@ public:
 	* @return Pointer to front queue element.
 	*/
 	T* front() noexcept {
-		return head_.load()->data;
+		return &(head_.load()->data);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public:
 	* @return Constant pointer to front queue element.
 	*/
 	const T* front() const noexcept {
-		return head_.load()->data;
+		return &(head_.load()->data);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public:
 	* @return Pointer to last queue element.
 	*/
 	T* back() noexcept {
-		return tail_.load()->data;
+		return &(tail_.load()->data);
 	}
 
 	/**
@@ -100,7 +100,7 @@ public:
 	* @return Constant pointer to last queue element.
 	*/
 	const T* back() const noexcept {
-		return tail_.load()->data;
+		return &(tail_.load()->data);
 	}
 
 	/**

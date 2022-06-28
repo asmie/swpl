@@ -41,13 +41,13 @@ TEST(ConcurrentQueue, push)
 
 	queue.push(555);
 
-	ASSERT_EQ(queue.front(), 555);
-	ASSERT_EQ(queue.back(), 555);
+	ASSERT_EQ(*queue.front(), 555);
+	ASSERT_EQ(*queue.back(), 555);
 
 	queue.push(928);
 
-	ASSERT_EQ(queue.front(), 555);
-	ASSERT_EQ(queue.back(), 928);
+	ASSERT_EQ(*queue.front(), 555);
+	ASSERT_EQ(*queue.back(), 928);
 }
 
 TEST(ConcurrentQueue, pop)
@@ -56,18 +56,18 @@ TEST(ConcurrentQueue, pop)
 
 	queue.push(555);
 
-	ASSERT_EQ(queue.front(), 555);
-	ASSERT_EQ(queue.back(), 555);
+	ASSERT_EQ(*queue.front(), 555);
+	ASSERT_EQ(*queue.back(), 555);
 
 	queue.push(928);
 
-	ASSERT_EQ(queue.front(), 555);
-	ASSERT_EQ(queue.back(), 928);
+	ASSERT_EQ(*queue.front(), 555);
+	ASSERT_EQ(*queue.back(), 928);
 
 	queue.pop();
 
-	ASSERT_EQ(queue.front(), 928);
-	ASSERT_EQ(queue.back(), 928);
+	ASSERT_EQ(*queue.front(), 928);
+	ASSERT_EQ(*queue.back(), 928);
 }
 
 TEST(ConcurrentQueue, sequential_usage)
@@ -82,7 +82,7 @@ TEST(ConcurrentQueue, sequential_usage)
 	ASSERT_EQ(queue.empty(), false);
 	
 	for (int i = 0; i < elems; ++i) {
-		ASSERT_EQ(queue.front(), i);
+		ASSERT_EQ(*queue.front(), i);
 		queue.pop();
 		ASSERT_EQ(queue.size(), elems -i-1);
 	}
