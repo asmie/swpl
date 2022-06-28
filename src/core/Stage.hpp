@@ -11,6 +11,7 @@
 #define SRC_CORE_STAGE_HPP_
 
 #include "IO.hpp"
+#include "ConcurrentQueue.hpp"
 
 #include <atomic>
 #include <queue>
