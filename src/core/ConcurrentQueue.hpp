@@ -27,46 +27,88 @@ public:
 * This is the first implemenetation - further optimization is needed to avoid blocking in some places - as it's 
 * possible to write it using atomics and counting references only.
 * 
-* Queue is trying to be compilant with standard STL queue.
+* Queue is trying to be compilant with standard STL queue. Due to be concurrent-safe front() and back() members does not
+* return references (as in STL version) but pointers to data. This prevent races when user check if queue is empty and then
+* calls front()/back() - between empty() and front()/back() some other threads can pop() queue and make it empty. It can lead
+* to undefined behaviour - returning null reference. Returning pointer is always safe as there is possibility to return nullptr.
 * 
 * Currently ConcurrentQueue is intended to solve one consumer with multiple producers problem as this is the most common usecase
 * for the current application.
 * 
 * TODO: remove to_remove_mutex_ to avoid blocking.
+* TODO2: change memory order from seq_cst to more loose one.
 * 
 */
 template<class T, class Allocator = std::allocator<T> >
 class ConcurrentQueue {
 public:
 	ConcurrentQueue() { }
-	~ConcurrentQueue() { }
+	
+	/**
+	* Destructor of the ConcurrentQueue. Deletes all allocated nodes.
+	*/
+	~ConcurrentQueue() { 
+		while (head_ != nullptr) {
+			QueueNode<T>* to_remove = head_;
+			head_ = head_->next;
+			delete to_remove;
+		}
+	}
 
+	/**
+	* Check if queue is empty.
+	* @return True if queue is empty.
+	*/
 	[[nodiscard]] bool empty() const noexcept {
 		return size_.load(std::memory_order::seq_cst) == 0;
 	}
 	
+	/**
+	* Get size of the queue.
+	* @return Size of the queue.
+	*/
 	size_t size() const noexcept {
 		return size_.load(std::memory_order::seq_cst);
 	}
 
-	T& front() {
-		return head_.load()->data;		// As in STL queue - front is first element and caller is responsible not to call front() on empty queue.
-	}
-	
-	const T& front() const {
-		return head_.load()->data;		// As in STL queue - front is first element and caller is responsible not to call front() on empty queue.
+	/**
+	* Return front queue element. 
+	* @return Pointer to front queue element.
+	*/
+	T* front() noexcept {
+		return head_.load()->data;
 	}
 
-	T& back() {
+	/**
+	* Return front queue element.
+	* @return Constant pointer to front queue element.
+	*/
+	const T* front() const noexcept {
+		return head_.load()->data;
+	}
+
+	/**
+	* Return last queue element.
+	* @return Pointer to last queue element.
+	*/
+	T* back() noexcept {
 		return tail_.load()->data;
 	}
 
-	const T& back() const {
+	/**
+	* Return last queue element.
+	* @return Constant pointer to last queue element.
+	*/
+	const T* back() const noexcept {
 		return tail_.load()->data;
 	}
 
+	/**
+	* Push element to the queue.
+	* @param value element to push.
+	*/
 	void push(const T& value) {
-		std::scoped_lock lock(to_remove_mutex_);
+		std::scoped_lock lock(to_remove_mutex_);								// TODO: remove to avoid locking
 		QueueNode<T>* new_node = new QueueNode<T>(value);
 		auto old_tail = tail_.load(std::memory_order::seq_cst);
 		if (old_tail != nullptr)
@@ -81,8 +123,12 @@ public:
 		//}
 	}
 	
+	/**
+	* Push element to the queue.
+	* @param value element to push.
+	*/
 	void push(T&& value) {
-		std::scoped_lock lock(to_remove_mutex_);
+		std::scoped_lock lock(to_remove_mutex_);							// TODO: remove to avoid locking
 		QueueNode<T>* new_node = new QueueNode<T>(std::move(value));
 		auto old_tail = tail_.load(std::memory_order::seq_cst);
 		if (old_tail != nullptr)
@@ -93,8 +139,11 @@ public:
 		size_.fetch_add(1);
 	}
 
+	/**
+	* Pop front element from the queue.
+	*/
 	void pop() {
-		std::scoped_lock lock(to_remove_mutex_);
+		std::scoped_lock lock(to_remove_mutex_);							// TODO: remove to avoid locking
 		auto old_head = head_.load(std::memory_order::seq_cst);
 		auto old_tail = tail_.load(std::memory_order::seq_cst);
 		
@@ -112,6 +161,10 @@ public:
 		}	
 	}
 
+	/**
+	* Swap elements from the other queue with the current one.
+	* @param other queue to swap with.
+	*/
 	void swap(ConcurrentQueue& other) noexcept {
 
 	}
@@ -126,9 +179,9 @@ public:
 	}
 
 private:
-	std::atomic<QueueNode<T>*> head_;
-	std::atomic<QueueNode<T>*> tail_;
-	std::atomic<size_t> size_;
+	std::atomic<QueueNode<T>*> head_;					/*!< Queue head */
+	std::atomic<QueueNode<T>*> tail_;					/*!< Queue tail */
+	std::atomic<size_t> size_;							/*!< Queue size */
 
-	std::mutex to_remove_mutex_;
+	std::mutex to_remove_mutex_;						/*!< Mutex to be removed when queue will be fully lock-free */
 };
