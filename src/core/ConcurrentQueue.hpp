@@ -43,6 +43,12 @@ template<class T, class Allocator = std::allocator<T> >
 class ConcurrentQueue {
 public:
 	ConcurrentQueue() { }
+
+	ConcurrentQueue(const ConcurrentQueue<T>& other) {
+		for (unsigned int i = 0; i < other.size(); i++) {
+			push(*other.front());
+		}
+	}
 	
 	/**
 	* Destructor of the ConcurrentQueue. Deletes all allocated nodes.
@@ -172,10 +178,12 @@ public:
 
 	ConcurrentQueue& operator=(const ConcurrentQueue& other) {
 		
+		return *this;
 	}
 
 	ConcurrentQueue& operator=(ConcurrentQueue&& other) noexcept {
 		
+		return *this;
 	}
 
 private:

@@ -16,11 +16,13 @@
 #include <atomic>
 #include <queue>
 #include <map>
+#include <condition_variable>
 
 struct DataQueue
 {
-	std::queue<std::vector<uint8_t>> queue;
+	ConcurrentQueue<std::vector<uint8_t>> queue;
 	std::unique_ptr<std::mutex> mutex;
+	std::unique_ptr<std::condition_variable> cv;
 };
 
 /**
@@ -48,9 +50,9 @@ public:
 		
 		if (incoming_data_.contains(id))
 		{
-			std::scoped_lock lock{ *incoming_data_[id].mutex.get() };
-			incoming_data_[id].queue.push(std::move(data));
 			added = true;
+			incoming_data_[id].queue.push(std::move(data));
+			incoming_data_[id].cv->notify_one();										// Notify the thread that there is new data in the queue.
 		}
 		return added;
 	}
@@ -65,6 +67,7 @@ public:
 
 		incoming_data_.insert_or_assign(id, std::move(DataQueue{}));
 		incoming_data_[id].mutex = std::make_unique<std::mutex>();
+		incoming_data_[id].cv = std::make_unique<std::condition_variable>();
 		outgoing_data_.insert_or_assign(id, sender);
 	}
 
